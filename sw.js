@@ -1,4 +1,4 @@
-var CACHE = 'wagecheck-v1.0.0';
+var CACHE = 'wagecheck-v1.3.0';
 var ASSETS = [
   '/WageCheck/',
   '/WageCheck/index.html',
