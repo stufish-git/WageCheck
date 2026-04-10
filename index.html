@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1B2F5E">
+<meta name="description" content="Check if your live-in care job pays above National Living Wage. Self-employed tax estimate included.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WageCheck">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
+<link rel="apple-touch-icon" sizes="76x76"  href="icon-76.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<title>WageCheck</title>
+<style>
+:root{--navy:#1B2F5E;--bg:#F2F4F8;--surface:#fff;--border:#d0d5e0;--border-light:#e8eaf0;--muted:#6b7a9b;--hint:#9ba8c0;--red-bg:#FCEBEB;--red-border:#F09595;--red-mid:#F7C1C1;--red-text:#791F1F;--red-dark:#A32D2D;--amber-bg:#FAEEDA;--amber-border:#FAC775;--amber-text:#633806;--amber-dark:#854F0B;--green-bg:#EAF3DE;--green-border:#C0DD97;--green-text:#27500A;--green-dark:#3B6D11;--blue-bg:#E6F1FB;--blue-border:#85B7EB;--blue-dark:#0C447C;--blue-mid:#185FA5;--navy-tint:#e8edf5;--navy-tint-border:#c0cce0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--navy);min-height:100vh;padding-bottom:max(2rem,env(safe-area-inset-bottom))}
+.shell{max-width:480px;margin:0 auto}
+header{background:var(--navy);color:#fff;padding:1rem 1.25rem;padding-top:calc(1rem + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.logo{font-family:'DM Serif Display',serif;font-size:20px;color:#fff;line-height:1}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px}
+.ver-badge{font-size:10px;background:rgba(255,255,255,.15);color:#fff;padding:2px 8px;border-radius:4px;flex-shrink:0}
+.card{background:var(--surface);border-radius:10px;border:.5px solid var(--border);padding:1rem 1.125rem;margin:.625rem .625rem 0}
+.rights-card{background:var(--surface);border-radius:10px;border:1.5px solid var(--red-border);padding:1rem 1.125rem;margin:.625rem .625rem 0}
+.slabel{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:.625rem}
+.yr-pills{display:flex;gap:4px;flex-wrap:wrap}
+.yr-pill{font-size:11px;padding:4px 8px;border-radius:20px;border:.5px solid var(--border);color:#4a5a7a;background:var(--surface);cursor:pointer;transition:all .1s;user-select:none;-webkit-tap-highlight-color:transparent}
+.yr-pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.yr-pill:active{opacity:.75}
+.field-row{display:flex;gap:8px;margin-bottom:.75rem}
+.field{flex:1}
+.fl{font-size:12px;color:var(--muted);margin-bottom:4px}
+.iw{display:flex;align-items:center;border:.5px solid var(--border);border-radius:7px;overflow:hidden;height:40px;background:var(--surface);transition:border-color .15s}
+.iw:focus-within{border-color:var(--navy)}
+.iw .pre{padding:0 9px;background:var(--bg);border-right:.5px solid var(--border);font-size:13px;color:var(--muted);height:100%;display:flex;align-items:center;flex-shrink:0}
+.iw input{border:none;outline:none;font-size:15px;font-family:'DM Sans',sans-serif;padding:0 9px;width:100%;background:var(--surface);color:var(--navy);height:100%}
+.iw input::placeholder{color:var(--hint)}
+.iw .suf{padding:0 9px;color:var(--muted);font-size:12px;white-space:nowrap;flex-shrink:0}
+.bracket-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.bracket-btn{border:.5px solid var(--border);border-radius:8px;padding:.625rem .75rem;cursor:pointer;background:var(--surface);text-align:left;transition:all .15s;user-select:none;-webkit-tap-highlight-color:transparent}
+.bracket-btn:active{opacity:.8}
+.bracket-btn.on{border-width:1.5px}
+.bracket-btn.on.none{border-color:#5F5E5A;background:#F1EFE8}
+.bracket-btn.on.basic{border-color:var(--blue-mid);background:var(--blue-bg)}
+.bracket-btn.on.higher{border-color:var(--amber-dark);background:var(--amber-bg)}
+.b-title{font-size:12px;font-weight:500;color:var(--navy);margin-bottom:2px}
+.bracket-btn.on.none .b-title{color:#2C2C2A}
+.bracket-btn.on.basic .b-title{color:var(--blue-dark)}
+.bracket-btn.on.higher .b-title{color:var(--amber-text)}
+.b-sub{font-size:10px;color:var(--hint);line-height:1.4;margin-bottom:4px}
+.bracket-btn.on.none .b-sub{color:#5F5E5A}
+.bracket-btn.on.basic .b-sub{color:var(--blue-mid)}
+.bracket-btn.on.higher .b-sub{color:var(--amber-dark)}
+.b-rate{font-size:18px;font-weight:500;color:var(--navy)}
+.bracket-btn.on.none .b-rate{color:#2C2C2A}
+.bracket-btn.on.basic .b-rate{color:var(--blue-dark)}
+.bracket-btn.on.higher .b-rate{color:var(--amber-text)}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:.75rem}
+.metric{background:var(--bg);border-radius:7px;padding:.625rem .75rem;border:.5px solid var(--border-light)}
+.ml{font-size:10px;color:var(--muted);margin-bottom:3px}
+.mv{font-size:15px;font-weight:500;color:var(--navy)}
+.verdict{border-radius:9px;padding:.875rem 1rem}
+.verdict.below{background:var(--red-bg);border:.5px solid var(--red-border)}
+.verdict.above{background:var(--green-bg);border:.5px solid var(--green-border)}
+.verdict.close{background:var(--amber-bg);border:.5px solid var(--amber-border)}
+.vtop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.vrate{font-size:28px;font-weight:500;line-height:1.1;font-family:'DM Serif Display',serif}
+.vrate.below{color:var(--red-dark)}.vrate.above{color:var(--green-dark)}.vrate.close{color:var(--amber-dark)}
+.vlabel{font-size:10px;font-weight:500;margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px}
+.vlabel.below{color:var(--red-dark)}.vlabel.above{color:var(--green-dark)}.vlabel.close{color:var(--amber-dark)}
+.badge{font-size:10px;padding:3px 8px;border-radius:5px;font-weight:500;white-space:nowrap;flex-shrink:0}
+.badge.below{background:var(--red-mid);color:var(--red-text)}
+.badge.above{background:var(--green-border);color:var(--green-text)}
+.badge.close{background:var(--amber-border);color:var(--amber-text)}
+.track{height:5px;border-radius:3px;background:rgba(0,0,0,.1);margin:10px 0 4px;position:relative}
+.tfill{height:5px;border-radius:3px;position:absolute;top:0;left:0;transition:width .4s ease}
+.tfill.below{background:#E24B4A}.tfill.above{background:#639922}.tfill.close{background:#EF9F27}
+.tmark{position:absolute;top:-4px;width:2px;height:13px;background:var(--navy);border-radius:1px}
+.tlabels{display:flex;justify-content:space-between;font-size:10px;color:rgba(0,0,0,.35)}
+.tlabels .mid{color:var(--navy);font-weight:500}
+.vsub{font-size:12px;margin-top:6px;line-height:1.5}
+.vsub.below{color:var(--red-text)}.vsub.above{color:var(--green-text)}.vsub.close{color:var(--amber-text)}
+.need{margin-top:.625rem;padding:.5rem .75rem;border-radius:7px;font-size:12px;line-height:1.6}
+.need.below{background:var(--red-mid);color:var(--red-text)}
+.need.above{background:var(--green-border);color:var(--green-text)}
+.need.close{background:var(--amber-border);color:var(--amber-text)}
+.need strong{font-weight:500}
+.divider{height:.5px;background:var(--border-light);margin:.875rem 0}
+.ded-block{border:.5px solid var(--border-light);border-radius:8px;overflow:hidden;margin-bottom:6px}
+.ded-header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;cursor:pointer;background:var(--surface);user-select:none;-webkit-tap-highlight-color:transparent;transition:background .1s}
+.ded-header:active{background:var(--bg)}
+.ded-name{font-size:13px;color:var(--navy)}
+.ded-right{display:flex;align-items:center;gap:8px}
+.ded-amt{font-size:13px;font-weight:500;color:#8B4513}
+.ded-amt.zero{color:var(--muted)}.ded-amt.free{color:var(--green-dark)}
+.ded-chev{font-size:10px;color:var(--hint);transition:transform .2s;display:inline-block}
+.ded-chev.open{transform:rotate(180deg)}
+.ded-body{max-height:0;overflow:hidden;transition:max-height .25s ease}
+.ded-body.open{max-height:400px}
+.ded-inner{padding:8px 12px 10px;background:#f9fafb;border-top:.5px solid var(--border-light)}
+.drow{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:#5a6a8a;gap:8px}
+.drow span:first-child{flex:1}
+.dr{font-weight:500;color:var(--navy);white-space:nowrap}
+.dr.neg{color:#8B4513}.dr.zero{color:var(--muted)}.dr.green{color:var(--green-dark)}
+.dnote{font-size:11px;color:var(--hint);line-height:1.5;font-style:italic;border-top:.5px solid var(--border-light);padding-top:6px;margin-top:8px}
+.total-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;font-size:13px}
+.tl{color:var(--muted)}.tv{font-weight:500;color:var(--navy)}.tv-neg{font-weight:500;color:#8B4513}
+.take-home{background:var(--navy);border-radius:8px;padding:.875rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-top:.75rem}
+.th-label{font-size:11px;color:rgba(255,255,255,.55)}
+.th-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px}
+.th-val{font-family:'DM Serif Display',serif;font-size:26px;color:#fff}
+.est-note{font-size:11px;color:var(--hint);line-height:1.5;margin-top:.75rem;font-style:italic}
+.rights-header{display:flex;align-items:center;gap:10px;margin-bottom:.875rem}
+.rights-icon{width:30px;height:30px;border-radius:50%;background:var(--red-bg);border:.5px solid var(--red-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;font-weight:700;color:var(--red-dark);line-height:1}
+.rights-title{font-size:13px;font-weight:500;color:var(--red-dark)}
+.rights-sub{font-size:11px;color:#c0766e;margin-top:1px}
+.rights-point{border-radius:8px;padding:.75rem .875rem;margin-bottom:.625rem;font-size:12px;line-height:1.6}
+.rights-point:last-child{margin-bottom:0}
+.rights-point.red{background:var(--red-bg);border:.5px solid var(--red-mid)}
+.rights-point.amber{background:var(--amber-bg);border:.5px solid var(--amber-border)}
+.rights-point.navy{background:var(--navy-tint);border:.5px solid var(--navy-tint-border)}
+.rp-title{font-size:11px;font-weight:500;margin-bottom:4px}
+.rights-point.red .rp-title{color:var(--red-dark)}.rights-point.amber .rp-title{color:var(--amber-dark)}.rights-point.navy .rp-title{color:var(--navy)}
+.rights-point.red p{color:var(--red-text)}.rights-point.amber p{color:var(--amber-text)}.rights-point.navy p{color:var(--navy)}
+.rights-links{display:flex;gap:6px;margin-top:.875rem;flex-wrap:wrap}
+.rights-link{font-size:11px;padding:5px 10px;border-radius:6px;border:.5px solid var(--navy-tint-border);background:var(--navy-tint);color:var(--navy);text-decoration:none;-webkit-tap-highlight-color:transparent}
+.acc-btn{display:flex;align-items:center;justify-content:center;gap:4px;margin:.75rem .625rem 0;padding:7px;cursor:pointer;border-radius:8px;border:.5px solid var(--border-light);background:#f8f9fb;-webkit-tap-highlight-color:transparent}
+.acc-btn span{font-size:10px;color:#c0c8d8;letter-spacing:.2px}
+.acc-panel{display:none;background:var(--bg);border-radius:10px;border:.5px solid var(--border);padding:.875rem 1.125rem;margin:.375rem .625rem 0}
+.acc-panel.open{display:block}
+.ref-slabel{font-size:10px;font-weight:500;color:var(--hint);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.5rem}
+.ref-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:.5px solid var(--border-light)}
+.ref-row:last-child{border-bottom:none}
+.rl{color:var(--hint)}.rv{color:var(--muted);font-weight:500}
+.ref-note{font-size:11px;color:var(--hint);line-height:1.5;margin-top:.625rem;padding-top:.625rem;border-top:.5px solid var(--border-light);font-style:italic}
+.empty{text-align:center;padding:2rem 1rem;color:var(--hint);font-size:13px}
+.empty-icon{font-size:32px;margin-bottom:.5rem;opacity:.35}
+footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding:.75rem 1.25rem;text-align:center;line-height:1.6;margin:.625rem .625rem 0;border-radius:10px}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header>
+  <div>
+    <div class="logo">WageCheck</div>
+    <div class="logo-sub">National Living Wage &middot; self-employed</div>
+  </div>
+  <div class="ver-badge">v1.0.0</div>
+</header>
+
+<div class="card">
+  <div class="slabel">Tax year</div>
+  <div class="yr-pills" id="yrPills">
+    <div class="yr-pill" data-yr="2022/23">2022/23</div>
+    <div class="yr-pill" data-yr="2023/24">2023/24</div>
+    <div class="yr-pill" data-yr="2024/25">2024/25</div>
+    <div class="yr-pill" data-yr="2025/26">2025/26</div>
+    <div class="yr-pill on" data-yr="2026/27">2026/27</div>
+    <div class="yr-pill" data-yr="2027/28">2027/28 <span style="font-size:9px;opacity:.7">est.</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="slabel">This job</div>
+  <div class="field-row">
+    <div class="field">
+      <div class="fl">Daily rate</div>
+      <div class="iw"><span class="pre">&pound;</span><input type="number" id="dailyRate" inputmode="decimal" placeholder="0" min="0" step="1" autocomplete="off"><span class="suf">/day</span></div>
+    </div>
+    <div class="field">
+      <div class="fl">Number of days</div>
+      <div class="iw"><input type="number" id="numDays" inputmode="decimal" placeholder="0" min="0.5" step="0.5" style="text-align:center" autocomplete="off"><span class="suf">days</span></div>
+    </div>
+  </div>
+  <div class="field-row" style="margin-bottom:0">
+    <div class="field">
+      <div class="fl">Hours worked per day</div>
+      <div class="iw"><input type="number" id="hrsDay" inputmode="decimal" placeholder="0" min="1" max="24" step="0.5" style="text-align:center" autocomplete="off"><span class="suf">hrs/day</span></div>
+    </div>
+    <div class="field">
+      <div class="fl">Expenses (optional)</div>
+      <div class="iw"><span class="pre">&pound;</span><input type="number" id="expenses" inputmode="decimal" placeholder="0" min="0" step="1" autocomplete="off"></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="slabel">Your tax situation this year</div>
+  <div class="bracket-grid">
+    <div class="bracket-btn none" data-bracket="none" onclick="setBracket('none')">
+      <div class="b-title">No tax</div>
+      <div class="b-sub">Total income under &pound;12,570</div>
+      <div class="b-rate">0%</div>
+    </div>
+    <div class="bracket-btn basic on" data-bracket="basic" onclick="setBracket('basic')">
+      <div class="b-title">Basic rate</div>
+      <div class="b-sub">&pound;12,570 &ndash; &pound;50,270</div>
+      <div class="b-rate">20%</div>
+    </div>
+    <div class="bracket-btn higher" data-bracket="higher" onclick="setBracket('higher')">
+      <div class="b-title">Higher rate</div>
+      <div class="b-sub">Above &pound;50,270</div>
+      <div class="b-rate">40%</div>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="resultsCard">
+  <div class="empty"><div class="empty-icon">&#9998;</div>Enter job details above to check against NLW</div>
+</div>
+
+<div id="rightsSection" style="display:none">
+  <div class="rights-card">
+    <div class="rights-header">
+      <div class="rights-icon">!</div>
+      <div>
+        <div class="rights-title">Your pay is below National Living Wage</div>
+        <div class="rights-sub">Know your rights as a self-employed carer</div>
+      </div>
+    </div>
+    <div class="rights-point red">
+      <div class="rp-title">The accommodation offset cannot make up the shortfall</div>
+      <p>If an agency or client argues that free accommodation brings your pay above NLW &mdash; this does not hold. The HMRC accommodation offset is an employer/employee mechanism only. It has no legal application to self-employed workers.</p>
+    </div>
+    <div class="rights-point amber">
+      <div class="rp-title">Self-employed status and NMW rules cannot both apply</div>
+      <p>An agency cannot call you self-employed to avoid employer obligations, then use NMW offset rules to justify low pay. Those rules only exist within an employment relationship &mdash; they cannot use both positions at once.</p>
+    </div>
+    <div class="rights-point amber">
+      <div class="rp-title">You may actually be a worker, not self-employed</div>
+      <p>If you work set hours, for one client, directed by an agency &mdash; HMRC or an employment tribunal may decide you are a worker or employee in substance. If so, NMW applies and back pay can be claimed.</p>
+    </div>
+    <div class="rights-point navy">
+      <div class="rp-title">Where to get help</div>
+      <p>ACAS runs a free helpline for pay disputes. HMRC has a National Minimum Wage complaints process. Citizens Advice can help you understand your employment status and rights.</p>
+    </div>
+    <div class="rights-links">
+      <a class="rights-link" href="https://www.acas.org.uk/national-minimum-wage" target="_blank" rel="noopener">ACAS &middot; minimum wage &#8599;</a>
+      <a class="rights-link" href="https://www.gov.uk/pay-and-work-rights" target="_blank" rel="noopener">HMRC &middot; pay rights &#8599;</a>
+      <a class="rights-link" href="https://www.citizensadvice.org.uk/work/rights-at-work/pay/" target="_blank" rel="noopener">Citizens Advice &#8599;</a>
+    </div>
+  </div>
+</div>
+
+<div class="acc-btn" id="accBtn" style="display:none" onclick="toggleAcc()">
+  <span id="accBtnTxt">&#9660; accommodation offset reference</span>
+</div>
+<div class="acc-panel" id="accPanel">
+  <div class="ref-slabel">For reference only &mdash; not applicable to self-employed</div>
+  <div id="refRows"></div>
+  <div class="ref-note">The HMRC accommodation offset applies to employed workers only. It cannot be claimed as a tax deduction by self-employed carers. Shown here as a package comparison reference only.</div>
+</div>
+
+<footer>For guidance only &middot; not financial or legal advice &middot; stufish-git.github.io/WageCheck</footer>
+
+</div>
+<script>
+var NLW={'2022/23':9.50,'2023/24':10.42,'2024/25':11.44,'2025/26':12.21,'2026/27':12.71,'2027/28':12.65};
+var ACC={'2022/23':8.70,'2023/24':9.10,'2024/25':9.99,'2025/26':10.66,'2026/27':11.10,'2027/28':11.10};
+var TAX={
+  '2022/23':{basic:.20,higher:.40,c4main:.0973,c4upper:.02,c4low:12570,c4high:50270,c2weekly:3.15,c2paid:false},
+  '2023/24':{basic:.20,higher:.40,c4main:.09,  c4upper:.02,c4low:12570,c4high:50270,c2weekly:3.45,c2paid:false},
+  '2024/25':{basic:.20,higher:.40,c4main:.06,  c4upper:.02,c4low:12570,c4high:50270,c2weekly:3.45,c2paid:true},
+  '2025/26':{basic:.20,higher:.40,c4main:.06,  c4upper:.02,c4low:12570,c4high:50270,c2weekly:3.45,c2paid:true},
+  '2026/27':{basic:.20,higher:.40,c4main:.06,  c4upper:.02,c4low:12570,c4high:50270,c2weekly:3.45,c2paid:true},
+  '2027/28':{basic:.20,higher:.40,c4main:.06,  c4upper:.02,c4low:12570,c4high:50270,c2weekly:3.45,c2paid:true}
+};
+var yr='2026/27',bracket='basic',accOpen=false,openDeds={it:false,c4:false,c2:false};
+var fmt=function(n,dp){dp=dp===undefined?2:dp;return'\u00a3'+n.toFixed(dp).replace(/\B(?=(\d{3})+(?!\d))/g,',')};
+var pct=function(n){return(n*100).toFixed(0)+'%'};
+var el=function(id){return document.getElementById(id)};
+
+document.querySelectorAll('.yr-pill').forEach(function(p){
+  p.addEventListener('click',function(){
+    document.querySelectorAll('.yr-pill').forEach(function(x){x.classList.remove('on')});
+    p.classList.add('on');yr=p.getAttribute('data-yr');calc();
+  });
+});
+['dailyRate','numDays','hrsDay','expenses'].forEach(function(id){el(id).addEventListener('input',calc)});
+
+function setBracket(b){
+  bracket=b;
+  document.querySelectorAll('.bracket-btn').forEach(function(btn){btn.classList.remove('on')});
+  document.querySelector('[data-bracket="'+b+'"]').classList.add('on');
+  calc();
+}
+function toggleDed(id){
+  openDeds[id]=!openDeds[id];
+  var b=el('db-'+id),c=el('dc-'+id);
+  if(b)b.classList.toggle('open',openDeds[id]);
+  if(c)c.classList.toggle('open',openDeds[id]);
+}
+function toggleAcc(){
+  accOpen=!accOpen;
+  el('accPanel').classList.toggle('open',accOpen);
+  el('accBtnTxt').innerHTML=accOpen?'\u25b2 accommodation offset reference':'\u25bc accommodation offset reference';
+}
+
+function calc(){
+  var rate=parseFloat(el('dailyRate').value)||0;
+  var days=parseFloat(el('numDays').value)||0;
+  var hrs=parseFloat(el('hrsDay').value)||0;
+  var exp=parseFloat(el('expenses').value)||0;
+  var card=el('resultsCard'),rights=el('rightsSection'),accBtn=el('accBtn');
+  if(!rate||!days||!hrs){
+    card.innerHTML='<div class="empty"><div class="empty-icon">&#9998;</div>Enter job details above to check against NLW</div>';
+    rights.style.display='none';accBtn.style.display='none';return;
+  }
+  var totalPay=rate*days,totalHrs=hrs*days,cashHr=totalPay/totalHrs;
+  var nlw=NLW[yr],accDay=ACC[yr],accHr=accDay/hrs,pkgHr=cashHr+accHr;
+  var diff=cashHr-nlw,needed=nlw*totalHrs,nlwDaily=nlw*hrs;
+  var status=diff>=0?'above':(diff>=-1?'close':'below');
+  var statusText={below:'Below NLW',close:'Just below NLW',above:'Above NLW'}[status];
+  var diffText={
+    below:fmt(Math.abs(diff))+'/hr below National Living Wage ('+fmt(nlw)+')',
+    close:fmt(Math.abs(diff))+'/hr below National Living Wage ('+fmt(nlw)+') \u2014 just under',
+    above:fmt(diff)+'/hr above National Living Wage ('+fmt(nlw)+')'
+  }[status];
+  var needHTML=status==='above'
+    ?'<div class="need above">Meets NLW \u2014 total pay of <strong>'+fmt(totalPay)+'</strong> is <strong>'+fmt(totalPay-needed)+' above</strong> the minimum required.</div>'
+    :'<div class="need '+status+'">To meet NLW you need <strong>'+fmt(needed)+' total</strong> \u2014 or a daily rate of <strong>'+fmt(nlwDaily)+'/day</strong>.</div>';
+  var maxHr=Math.max(nlw*1.6,cashHr*1.1,16);
+  var fillPct=Math.min(100,(cashHr/maxHr)*100).toFixed(1);
+  var markPct=Math.min(99,(nlw/maxHr)*100).toFixed(1);
+  var hrsDisp=totalHrs%1===0?totalHrs.toString():totalHrs.toFixed(1);
+
+  var ty=TAX[yr];
+  var taxProfit=Math.max(0,totalPay-exp);
+  var weeks=days/7;
+
+  /* Income tax — applied directly at bracket rate, no annualisation */
+  var itRate=bracket==='none'?0:(bracket==='basic'?ty.basic:ty.higher);
+  var propTax=taxProfit*itRate;
+
+  /* Class 4 NI — direct rate on this job's profit, zero if no-tax bracket */
+  var propC4=bracket==='none'?0:taxProfit*ty.c4main;
+
+  /* Class 2 NI */
+  var c2paid=ty.c2paid;
+  var propC2=c2paid?0:ty.c2weekly*weeks;
+
+  var totalDed=propTax+propC4+propC2;
+  var takeHome=taxProfit-totalDed;
+  var afterTaxHr=takeHome/totalHrs;
+
+  var expLine=exp>0
+    ?'<div class="total-row"><span class="tl">Gross earnings</span><span class="tv">'+fmt(totalPay)+'</span></div>'
+     +'<div class="total-row"><span class="tl">Expenses deducted</span><span class="tv-neg">\u2212'+fmt(exp)+'</span></div>'
+     +'<div class="total-row" style="border-top:.5px solid var(--border-light);padding-top:5px;margin-top:2px"><span class="tl">Taxable profit</span><span class="tv">'+fmt(taxProfit)+'</span></div>'
+    :'<div class="total-row"><span class="tl">Cash earnings this job</span><span class="tv">'+fmt(taxProfit)+'</span></div>';
+
+  var bracketLabel={none:'No tax (under \u00a312,570/yr)',basic:'Basic rate \u2014 20%',higher:'Higher rate \u2014 40%'}[bracket];
+  var bracketNote={
+    none:'No income tax or Class\u00a04\u00a0NI applied. Your total self-employed income this year is below the personal allowance.',
+    basic:'Tax applied at the basic rate of 20% directly to this job\u2019s taxable earnings.',
+    higher:'Tax applied at the higher rate of 40% directly to this job\u2019s taxable earnings.'
+  }[bracket];
+
+  var itAmt=bracket==='none'?'<span class="ded-amt zero">\u00a30.00</span>':'<span class="ded-amt">\u2212'+fmt(propTax)+'</span>';
+  var c4Amt=bracket==='none'?'<span class="ded-amt zero">\u00a30.00</span>':'<span class="ded-amt">\u2212'+fmt(propC4)+'</span>';
+  var c2Amt=c2paid?'<span class="ded-amt free">No cost</span>':(propC2>0?'<span class="ded-amt">\u2212'+fmt(propC2)+'</span>':'<span class="ded-amt zero">\u00a30.00</span>');
+
+  var c2Body=c2paid
+    ?'<div class="drow"><span>From 2024/25</span><span class="dr green">Treated as paid automatically</span></div><div class="drow"><span>Cost to you</span><span class="dr zero">\u00a30.00</span></div><div class="dnote">From April 2024 Class\u00a02\u00a0NI is treated as automatically paid if annual profits exceed \u00a312,570. You receive full state pension credits at no cost.</div>'
+    :'<div class="drow"><span>Rate</span><span class="dr">'+fmt(ty.c2weekly)+'/week</span></div><div class="drow"><span>Weeks this job</span><span class="dr">'+weeks.toFixed(1)+'\u00a0wks</span></div><div class="drow"><span>Estimated cost</span><span class="dr neg">\u2212'+fmt(propC2)+'</span></div><div class="dnote">Class\u00a02\u00a0NI buys state pension credits. Flat weekly rate regardless of profit level.</div>';
+
+  card.innerHTML=
+    '<div class="slabel">Job summary</div>'
+    +'<div class="metrics">'
+    +'<div class="metric"><div class="ml">Total pay</div><div class="mv">'+fmt(totalPay,0)+'</div></div>'
+    +'<div class="metric"><div class="ml">Total hours</div><div class="mv">'+hrsDisp+'\u00a0hrs</div></div>'
+    +'<div class="metric"><div class="ml">Cash rate</div><div class="mv">'+fmt(cashHr)+'/hr</div></div>'
+    +'</div>'
+    +'<div class="verdict '+status+'">'
+    +'<div class="vtop"><div><div class="vlabel '+status+'">Cash hourly rate</div><div class="vrate '+status+'">'+fmt(cashHr)+'/hr</div></div>'
+    +'<div class="badge '+status+'">'+statusText+'</div></div>'
+    +'<div class="track"><div class="tfill '+status+'" style="width:'+fillPct+'%"></div><div class="tmark" style="left:'+markPct+'%"></div></div>'
+    +'<div class="tlabels"><span>\u00a30</span><span class="mid">NLW\u00a0'+fmt(nlw)+'\u00a0\u2191</span><span>'+fmt(maxHr,0)+'/hr</span></div>'
+    +'<div class="vsub '+status+'">'+diffText+'</div></div>'
+    +needHTML
+    +'<div class="divider"></div>'
+    +'<div class="slabel">Estimated deductions \u2014 self-employed</div>'
+    +expLine
+    +'<div style="margin-top:.625rem">'
+
+    +'<div class="ded-block"><div class="ded-header" onclick="toggleDed(\'it\')">'
+    +'<span class="ded-name">Income tax</span><div class="ded-right">'+itAmt+'<span class="ded-chev" id="dc-it">\u25bc</span></div></div>'
+    +'<div class="ded-body" id="db-it"><div class="ded-inner">'
+    +'<div class="drow"><span>Bracket selected</span><span class="dr">'+bracketLabel+'</span></div>'
+    +'<div class="drow"><span>Applied to taxable earnings</span><span class="dr">'+fmt(taxProfit)+'</span></div>'
+    +(bracket!=='none'?'<div class="drow"><span>Tax on this job</span><span class="dr neg">\u2212'+fmt(propTax)+'</span></div>':'')
+    +'<div class="dnote">'+bracketNote+'</div></div></div></div>'
+
+    +'<div class="ded-block"><div class="ded-header" onclick="toggleDed(\'c4\')">'
+    +'<span class="ded-name">Class\u00a04\u00a0NI</span><div class="ded-right">'+c4Amt+'<span class="ded-chev" id="dc-c4">\u25bc</span></div></div>'
+    +'<div class="ded-body" id="db-c4"><div class="ded-inner">'
+    +'<div class="drow"><span>Rate ('+yr+')</span><span class="dr">'+pct(ty.c4main)+'</span></div>'
+    +'<div class="drow"><span>Applied to taxable earnings</span><span class="dr">'+fmt(taxProfit)+'</span></div>'
+    +(bracket!=='none'?'<div class="drow"><span>Class\u00a04 on this job</span><span class="dr neg">\u2212'+fmt(propC4)+'</span></div>':'')
+    +'<div class="dnote">Class\u00a04\u00a0NI is the main National Insurance contribution for self-employed workers. Applied at the standard rate directly to this job\u2019s taxable earnings. Not applied in the no-tax bracket as profits fall below the lower threshold.</div>'
+    +'</div></div></div>'
+
+    +'<div class="ded-block"><div class="ded-header" onclick="toggleDed(\'c2\')">'
+    +'<span class="ded-name">Class\u00a02\u00a0NI</span><div class="ded-right">'+c2Amt+'<span class="ded-chev" id="dc-c2">\u25bc</span></div></div>'
+    +'<div class="ded-body" id="db-c2"><div class="ded-inner">'+c2Body+'</div></div></div>'
+    +'</div>'
+
+    +'<div class="take-home">'
+    +'<div><div class="th-label">Estimated take-home this job</div><div class="th-sub">'+fmt(afterTaxHr)+'/hr after tax</div></div>'
+    +'<div class="th-val">'+fmt(takeHome)+'</div></div>'
+    +'<div class="est-note">Tax applied at your selected bracket directly to this job\u2019s earnings \u2014 no annualisation. Adjust your bracket above if your situation changes across the year.</div>';
+
+  rights.style.display=(status==='below'||status==='close')?'block':'none';
+
+  var pkgColour=pkgHr>=nlw?'var(--green-dark)':'var(--red-dark)';
+  el('refRows').innerHTML=
+    '<div class="ref-row"><span class="rl">HMRC offset rate ('+yr+')</span><span class="rv">'+fmt(accDay)+'/day</span></div>'
+    +'<div class="ref-row"><span class="rl">Offset per hour (at '+hrs+'\u00a0hrs/day)</span><span class="rv">'+fmt(accHr)+'/hr</span></div>'
+    +'<div class="ref-row"><span class="rl">Cash + offset package value</span><span class="rv" style="color:'+pkgColour+'">'+fmt(pkgHr)+'/hr</span></div>'
+    +'<div class="ref-row"><span class="rl">National Living Wage ('+yr+')</span><span class="rv">'+fmt(nlw)+'/hr</span></div>';
+
+  accBtn.style.display='flex';
+  ['it','c4','c2'].forEach(function(id){
+    if(openDeds[id]){var b=el('db-'+id),c=el('dc-'+id);if(b)b.classList.add('open');if(c)c.classList.add('open')}
+  });
+}
+
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+</script>
+</body>
+</html>
