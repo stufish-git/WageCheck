@@ -1,7 +1,9 @@
-var CACHE = 'wagecheck-v1.3.0';
+var CACHE = 'wagecheck-v1.4.0';
 var ASSETS = [
   '/WageCheck/',
   '/WageCheck/index.html',
+  '/WageCheck/app.css',
+  '/WageCheck/app.js',
   '/WageCheck/manifest.json',
   '/WageCheck/favicon.svg',
   '/WageCheck/favicon.ico',

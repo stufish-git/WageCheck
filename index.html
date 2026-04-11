@@ -14,259 +14,12 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
 <link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
-<link rel="apple-touch-icon" sizes="76x76" href="icon-76.png">
+<link rel="apple-touch-icon" sizes="76x76"  href="icon-76.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
 <title>WageCheck</title>
-<style>
-
-:root{
-  --navy:#1B2F5E;--bg:#F2F4F8;--surface:#fff;
-  --border:#d0d5e0;--border-light:#e8eaf0;
-  --muted:#6b7a9b;--hint:#9ba8c0;
-  --red-bg:#FCEBEB;--red-border:#F09595;--red-mid:#F7C1C1;--red-text:#791F1F;--red-dark:#A32D2D;
-  --amber-bg:#FAEEDA;--amber-border:#FAC775;--amber-text:#633806;--amber-dark:#854F0B;
-  --green-bg:#EAF3DE;--green-border:#C0DD97;--green-text:#27500A;--green-dark:#3B6D11;
-  --blue-bg:#E6F1FB;--blue-mid:#185FA5;--blue-dark:#0C447C;
-  --night-bg:#f0f3f8;--night-border:#c0cce0;--night-metric:#e4ecf5;--night-metric-border:#b8cce0;
-  --night-text:#2a4480;--night-summary:#dce4f0;
-  --navy-tint:#e8edf5;--navy-tint-border:#c0cce0;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
-body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--navy);min-height:100vh;padding-bottom:max(2rem,env(safe-area-inset-bottom))}
-.shell{max-width:480px;margin:0 auto}
-
-header{background:var(--navy);color:#fff;padding:1rem 1.25rem;padding-top:calc(1rem + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.logo{font-family:'DM Serif Display',serif;font-size:20px;color:#fff;line-height:1}
-.logo-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px}
-.ver-badge{font-size:10px;background:rgba(255,255,255,.15);color:#fff;padding:2px 8px;border-radius:4px;flex-shrink:0}
-
-/* All cards identical padding/radius */
-.card{background:var(--surface);border-radius:10px;border:.5px solid var(--border);padding:1rem 1.125rem;margin:.625rem .625rem 0}
-.card.night-tint{background:var(--night-bg);border-color:var(--night-border)}
-.card.navy-card{background:var(--navy);border-color:var(--navy)}
-.rights-card{background:var(--surface);border-radius:10px;border:1.5px solid var(--red-border);padding:1rem 1.125rem;margin:.625rem .625rem 0}
-
-.slabel{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:.625rem;display:flex;align-items:center;gap:5px}
-.slabel.night{color:var(--night-text)}
-.slabel.light{color:rgba(255,255,255,.6)}
-
-.yr-pills{display:flex;gap:4px;flex-wrap:wrap}
-.yr-pill{font-size:11px;padding:4px 8px;border-radius:20px;border:.5px solid var(--border);color:#4a5a7a;background:var(--surface);cursor:pointer;transition:all .1s;user-select:none;-webkit-tap-highlight-color:transparent}
-.yr-pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-.yr-pill:active{opacity:.75}
-
-/* Bracket */
-.bracket-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.bracket-btn{border:.5px solid var(--border);border-radius:8px;padding:.625rem .75rem;cursor:pointer;background:var(--surface);text-align:left;transition:all .15s;user-select:none;-webkit-tap-highlight-color:transparent}
-.bracket-btn:active{opacity:.8}
-.bracket-btn.on{border-width:1.5px}
-.bracket-btn.on.none{border-color:#5F5E5A;background:#F1EFE8}
-.bracket-btn.on.basic{border-color:var(--blue-mid);background:var(--blue-bg)}
-.bracket-btn.on.higher{border-color:var(--amber-dark);background:var(--amber-bg)}
-.b-title{font-size:12px;font-weight:500;color:var(--navy);margin-bottom:2px}
-.bracket-btn.on.none .b-title{color:#2C2C2A}
-.bracket-btn.on.basic .b-title{color:var(--blue-dark)}
-.bracket-btn.on.higher .b-title{color:var(--amber-text)}
-.b-sub{font-size:10px;color:var(--hint);line-height:1.4;margin-bottom:4px}
-.bracket-btn.on.none .b-sub{color:#5F5E5A}
-.bracket-btn.on.basic .b-sub{color:var(--blue-mid)}
-.bracket-btn.on.higher .b-sub{color:var(--amber-dark)}
-.b-rate{font-size:18px;font-weight:500;color:var(--navy)}
-.bracket-btn.on.none .b-rate{color:#2C2C2A}
-.bracket-btn.on.basic .b-rate{color:var(--blue-dark)}
-.bracket-btn.on.higher .b-rate{color:var(--amber-text)}
-
-/* Fields */
-.field-row{display:flex;gap:8px;margin-bottom:.75rem}
-.field{flex:1}
-.fl{font-size:12px;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:4px}
-.fl.night{color:#4a6a9a}
-.iw{display:flex;align-items:center;border:.5px solid var(--border);border-radius:7px;overflow:hidden;height:40px;background:var(--surface);transition:border-color .15s}
-.iw:focus-within{border-color:var(--navy)}
-.iw.night-iw{background:#e8f0f8;border-color:var(--night-metric-border)}
-.iw.night-iw:focus-within{border-color:var(--navy)}
-.iw .pre{padding:0 9px;background:var(--bg);border-right:.5px solid var(--border);font-size:13px;color:var(--muted);height:100%;display:flex;align-items:center;flex-shrink:0}
-.iw.night-iw .pre{background:#dce8f4;border-right-color:var(--night-metric-border)}
-.iw input{border:none;outline:none;font-size:15px;font-family:'DM Sans',sans-serif;padding:0 9px;width:100%;background:var(--surface);color:var(--navy);height:100%}
-.iw.night-iw input{background:#e8f0f8}
-.iw input::placeholder{color:var(--hint)}
-.iw .suf{padding:0 9px;color:var(--muted);font-size:12px;white-space:nowrap;flex-shrink:0}
-
-/* Info popups */
-.info-wrap{position:relative;display:inline-flex;align-items:center}
-.info-btn{width:15px;height:15px;border-radius:50%;background:var(--navy-tint);border:.5px solid var(--navy-tint-border);color:var(--navy);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;user-select:none;-webkit-tap-highlight-color:transparent;line-height:1}
-.info-popup{display:none;position:absolute;left:0;top:20px;z-index:200;background:var(--navy);color:#fff;font-size:11px;line-height:1.55;padding:8px 10px;border-radius:7px;width:220px}
-.info-popup.right{left:auto;right:0}
-.info-popup.active{display:block}
-.info-popup::before{content:'';position:absolute;top:-4px;left:6px;width:8px;height:8px;background:var(--navy);transform:rotate(45deg);border-radius:1px}
-.info-popup.right::before{left:auto;right:6px}
-
-/* Night toggle within card */
-.night-toggle-row{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
-.nt-left{display:flex;align-items:center;gap:10px}
-.nt-icon{width:28px;height:28px;border-radius:7px;background:var(--navy-tint);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:all .2s}
-.nt-icon.on{background:var(--navy);color:#fff}
-.nt-title{font-size:13px;font-weight:500;color:var(--navy)}
-.nt-sub{font-size:11px;color:var(--hint);margin-top:1px}
-.nt-sw{width:36px;height:20px;border-radius:10px;background:#c4cad8;position:relative;flex-shrink:0;transition:background .2s}
-.nt-sw.on{background:var(--navy)}
-.nt-sw::after{content:'';position:absolute;width:16px;height:16px;border-radius:8px;background:#fff;top:2px;left:2px;transition:left .2s}
-.nt-sw.on::after{left:18px}
-.night-fields{display:none;margin-top:.875rem;padding-top:.875rem;border-top:.5px solid var(--night-border)}
-.night-fields.open{display:block}
-.night-summary-pill{background:var(--night-summary);border-radius:6px;padding:.375rem .75rem;font-size:11px;color:var(--night-text);font-weight:500;display:inline-block}
-
-/* Metrics — identical across all card types */
-.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:.75rem}
-.metric{border-radius:7px;padding:.625rem .75rem}
-.card .metric{background:var(--bg);border:.5px solid var(--border-light)}
-.card.night-tint .metric{background:var(--night-metric);border:.5px solid var(--night-metric-border)}
-.card.navy-card .metric{background:rgba(255,255,255,.1);border:.5px solid rgba(255,255,255,.15)}
-.ml{font-size:10px;margin-bottom:3px}
-.card .ml{color:var(--muted)}
-.card.night-tint .ml{color:#4a6a9a}
-.card.navy-card .ml{color:rgba(255,255,255,.5)}
-.mv{font-size:15px;font-weight:500}
-.card .mv,.card.night-tint .mv{color:var(--navy)}
-.card.navy-card .mv{color:#fff}
-
-/* NLW verdict */
-.nlw-verdict{border-radius:8px;padding:.75rem .875rem;display:flex;justify-content:space-between;align-items:flex-start}
-.nlw-verdict.above{background:var(--green-bg);border:.5px solid var(--green-border)}
-.nlw-verdict.below{background:var(--red-bg);border:.5px solid var(--red-border)}
-.nlw-verdict.close{background:var(--amber-bg);border:.5px solid var(--amber-border)}
-.nv-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
-.nlw-verdict.above .nv-label{color:var(--green-dark)}
-.nlw-verdict.below .nv-label{color:var(--red-dark)}
-.nlw-verdict.close .nv-label{color:var(--amber-dark)}
-.nv-rate{font-size:20px;font-weight:500;line-height:1;font-family:'DM Serif Display',serif}
-.nlw-verdict.above .nv-rate{color:var(--green-dark)}
-.nlw-verdict.below .nv-rate{color:var(--red-dark)}
-.nlw-verdict.close .nv-rate{color:var(--amber-dark)}
-.nv-sub{font-size:11px;margin-top:4px;line-height:1.4}
-.nlw-verdict.above .nv-sub{color:var(--green-text)}
-.nlw-verdict.below .nv-sub{color:var(--red-text)}
-.nlw-verdict.close .nv-sub{color:var(--amber-text)}
-.nv-badge{font-size:10px;padding:3px 8px;border-radius:5px;font-weight:500;white-space:nowrap;flex-shrink:0;margin-top:2px}
-.nlw-verdict.above .nv-badge{background:var(--green-border);color:var(--green-text)}
-.nlw-verdict.below .nv-badge{background:var(--red-mid);color:var(--red-text)}
-.nlw-verdict.close .nv-badge{background:var(--amber-border);color:var(--amber-text)}
-.need{padding:.5rem .75rem;border-radius:7px;font-size:12px;line-height:1.6;margin-top:6px}
-.need.below{background:var(--red-mid);color:var(--red-text)}
-.need.above{background:var(--green-border);color:var(--green-text)}
-.need.close{background:var(--amber-border);color:var(--amber-text)}
-.need strong{font-weight:500}
-
-/* Mencap expander */
-.mencap-toggle{display:flex;align-items:center;justify-content:space-between;margin-top:.75rem;padding:.5rem .75rem;border-radius:7px;background:var(--night-summary);border:.5px solid var(--night-metric-border);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
-.mencap-label{font-size:11px;font-weight:500;color:var(--navy);display:flex;align-items:center;gap:5px}
-.mencap-chev{font-size:10px;color:var(--muted);transition:transform .2s;display:inline-block}
-.mencap-chev.open{transform:rotate(180deg)}
-.mencap-body{max-height:0;overflow:hidden;transition:max-height .25s ease}
-.mencap-body.open{max-height:300px}
-.mencap-inner{font-size:11px;color:var(--night-text);line-height:1.6;padding:.625rem .75rem;background:#e8f0f8;border-radius:0 0 7px 7px;border:.5px solid var(--night-metric-border);border-top:none}
-.mencap-inner strong{color:var(--navy);font-weight:500}
-
-/* Combined card */
-.combined-th{display:flex;justify-content:space-between;align-items:center;margin-top:.625rem;padding-top:.625rem;border-top:.5px solid rgba(255,255,255,.15)}
-.cth-label{font-size:11px;color:rgba(255,255,255,.55)}
-.cth-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px}
-.cth-val{font-family:'DM Serif Display',serif;font-size:26px;color:#fff}
-
-/* Deduction blocks */
-.ded-block{border:.5px solid var(--border-light);border-radius:8px;overflow:hidden;margin-bottom:6px}
-.ded-header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;cursor:pointer;background:var(--surface);user-select:none;-webkit-tap-highlight-color:transparent;transition:background .1s}
-.ded-header:active{background:var(--bg)}
-.ded-name{font-size:13px;color:var(--navy)}
-.ded-right{display:flex;align-items:center;gap:8px}
-.ded-amt{font-size:13px;font-weight:500;color:#8B4513}
-.ded-amt.zero{color:var(--muted)}.ded-amt.free{color:var(--green-dark)}
-.ded-chev{font-size:10px;color:var(--hint);transition:transform .2s;display:inline-block}
-.ded-chev.open{transform:rotate(180deg)}
-.ded-body{max-height:0;overflow:hidden;transition:max-height .25s ease}
-.ded-body.open{max-height:300px}
-.ded-inner{padding:8px 12px 10px;background:#f9fafb;border-top:.5px solid var(--border-light)}
-.drow{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:#5a6a8a;gap:8px}
-.drow span:first-child{flex:1}
-.dr{font-weight:500;color:var(--navy);white-space:nowrap}
-.dr.neg{color:#8B4513}.dr.zero{color:var(--muted)}.dr.green{color:var(--green-dark)}
-.dnote{font-size:11px;color:var(--hint);line-height:1.5;font-style:italic;border-top:.5px solid var(--border-light);padding-top:6px;margin-top:8px}
-.total-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;font-size:13px}
-.tl{color:var(--muted)}.tv{font-weight:500;color:var(--navy)}.tv-neg{font-weight:500;color:#8B4513}
-.est-note{font-size:11px;color:var(--hint);line-height:1.5;margin-top:.75rem;font-style:italic}
-
-/* Rights card */
-.rights-header{display:flex;align-items:center;gap:10px;margin-bottom:.875rem}
-.rights-icon{width:28px;height:28px;border-radius:50%;background:var(--red-bg);border:.5px solid var(--red-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;color:var(--red-dark);line-height:1}
-.rights-title{font-size:13px;font-weight:500;color:var(--red-dark)}
-.rights-sub{font-size:11px;color:#c0766e;margin-top:1px}
-.rights-point{border-radius:8px;padding:.75rem .875rem;margin-bottom:.625rem;font-size:12px;line-height:1.6}
-.rights-point:last-child{margin-bottom:0}
-.rights-point.red{background:var(--red-bg);border:.5px solid var(--red-mid)}
-.rights-point.navy{background:var(--navy-tint);border:.5px solid var(--navy-tint-border)}
-.rp-title{font-size:11px;font-weight:500;margin-bottom:4px}
-.rights-point.red .rp-title{color:var(--red-dark)}.rights-point.navy .rp-title{color:var(--navy)}
-.rights-point.red p{color:var(--red-text)}.rights-point.navy p{color:var(--navy)}
-.rights-links{display:flex;gap:6px;margin-top:.875rem;flex-wrap:wrap}
-.rights-link{font-size:11px;padding:5px 10px;border-radius:6px;border:.5px solid var(--navy-tint-border);background:var(--navy-tint);color:var(--navy);text-decoration:none;-webkit-tap-highlight-color:transparent}
-
-.hrs-warn{border-radius:8px;padding:.75rem .875rem;font-size:12px;line-height:1.6;margin-top:.75rem;display:none}
-.hrs-warn.hard{background:var(--amber-bg);border:.5px solid var(--amber-border);color:var(--amber-text)}
-.hrs-warn.serious{background:var(--red-bg);border:.5px solid var(--red-border);color:var(--red-text)}
-.hrs-warn strong{font-weight:500}
-.wtr-card{border-radius:10px;border:.5px solid var(--border);margin:.625rem .625rem 0;overflow:hidden;background:var(--surface)}
-.wtr-header{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.125rem;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
-.wtr-hl{display:flex;align-items:center;gap:8px}
-.wtr-icon{width:28px;height:28px;border-radius:7px;background:var(--navy-tint);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.wtr-title{font-size:13px;font-weight:500;color:var(--navy)}
-.wtr-sub{font-size:11px;color:var(--hint);margin-top:1px}
-.wtr-chev{font-size:10px;color:var(--hint);transition:transform .2s;display:inline-block}
-.wtr-chev.open{transform:rotate(180deg)}
-.wtr-body{max-height:0;overflow:hidden;transition:max-height .45s ease}
-.wtr-body.open{max-height:1600px}
-.wtr-inner{padding:0 1.125rem 1.125rem;border-top:.5px solid var(--border-light)}
-.wtr-sh{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:.875rem 0 .375rem;padding-bottom:.375rem;border-bottom:.5px solid var(--border-light)}
-.wtr-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-bottom:3px;margin-top:.75rem}
-.wtr-ch{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;padding:.375rem .5rem;border-radius:6px;text-align:center}
-.wtr-ch.emp{background:var(--green-bg);color:var(--green-text)}
-.wtr-ch.sep{background:var(--red-bg);color:var(--red-dark)}
-.wtr-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-bottom:3px;align-items:stretch}
-.wc{border-radius:6px;padding:.5rem .5rem;font-size:11px;line-height:1.45}
-.wc.topic{background:var(--bg);color:#4a5a7a;font-weight:500;display:flex;align-items:center}
-.wc.good{background:var(--green-bg);color:var(--green-text)}
-.wc.bad{background:var(--red-bg);color:var(--red-text)}
-.wc.amber{background:var(--amber-bg);color:var(--amber-text)}
-.sc-box{background:var(--navy-tint);border:.5px solid var(--navy-tint-b,#c0cce0);border-radius:8px;padding:.75rem .875rem;margin-top:.5rem}
-.sc-title{font-size:11px;font-weight:500;color:var(--navy);margin-bottom:.5rem}
-.sc-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:.375rem;font-size:11px;color:#2a4480;line-height:1.5}
-.sc-dot{width:6px;height:6px;border-radius:50%;background:var(--navy);flex-shrink:0;margin-top:4px}
-.wtr-rights{background:var(--night-bg,#f0f3f8);border:.5px solid var(--night-border,#c0cce0);border-radius:8px;padding:.75rem .875rem;margin-top:.625rem}
-.wtr-rt{font-size:11px;font-weight:500;color:var(--navy);margin-bottom:.5rem}
-.wtr-rights p{font-size:11px;color:#2a4480;line-height:1.6}
-.wtr-rights strong{color:var(--navy);font-weight:500}
-.acc-btn{display:flex;align-items:center;justify-content:center;gap:4px;margin:.75rem .625rem 0;padding:7px;cursor:pointer;border-radius:8px;border:.5px solid var(--border-light);background:#f8f9fb;-webkit-tap-highlight-color:transparent}
-.acc-btn span{font-size:10px;color:#c0c8d8;letter-spacing:.2px}
-.acc-panel{display:none;background:var(--bg);border-radius:10px;border:.5px solid var(--border);padding:.875rem 1.125rem;margin:.375rem .625rem 0}
-.acc-panel.open{display:block}
-.ref-slabel{font-size:10px;font-weight:500;color:var(--hint);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.5rem}
-.ref-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:.5px solid var(--border-light)}
-.ref-row:last-child{border-bottom:none}
-.rl{color:var(--hint)}.rv{color:var(--muted);font-weight:500}
-.ref-note{font-size:11px;color:var(--hint);line-height:1.5;margin-top:.625rem;padding-top:.625rem;border-top:.5px solid var(--border-light);font-style:italic}
-
-.empty{text-align:center;padding:2rem 1rem;color:var(--hint);font-size:13px}
-.empty-icon{font-size:28px;margin-bottom:.5rem;opacity:.35}
-footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding:.75rem 1.25rem;text-align:center;line-height:1.6;margin:.625rem .625rem 0;border-radius:10px}
-
-.hrs-warn{border-radius:7px;padding:.5rem .75rem;font-size:11px;line-height:1.55;margin-top:5px}
-.hrs-warn.hard{background:#FAEEDA;border:.5px solid #FAC775;color:#633806}
-.hrs-warn.serious{background:#FCEBEB;border:.5px solid #F09595;color:#791F1F}
-.hrs-warn strong{font-weight:500}
-
-</style>
 </head>
 <body>
 <div class="shell">
@@ -276,7 +29,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding
     <div class="logo">WageCheck</div>
     <div class="logo-sub">National Living Wage &middot; self-employed</div>
   </div>
-  <div class="ver-badge">v1.3.0</div>
+  <div class="ver-badge">v1.4.0</div>
 </header>
 
 <!-- 1. Tax year -->
@@ -294,11 +47,10 @@ footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding
 
 <!-- 2. Tax situation -->
 <div class="card">
-  <div class="slabel">
-    Your tax situation this year
+  <div class="slabel">Your tax situation this year
     <div class="info-wrap">
       <div class="info-btn" onclick="toggleInfo('i-bracket')">i</div>
-      <div class="info-popup" id="i-bracket">Select the income tax band that applies to your total self-employed earnings this year. Tax is applied at this rate directly to this job&rsquo;s earnings &mdash; no annualisation used.</div>
+      <div class="info-popup" id="i-bracket">Select the income tax band for your total self-employed earnings this year. Tax is applied at this rate directly to this job&rsquo;s earnings &mdash; no annualisation used.</div>
     </div>
   </div>
   <div class="bracket-grid">
@@ -322,8 +74,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding
 
 <!-- 3. Daytime hours -->
 <div class="card">
-  <div class="slabel">
-    Daytime hours
+  <div class="slabel">Daytime hours
     <div class="info-wrap">
       <div class="info-btn" onclick="toggleInfo('i-day')">i</div>
       <div class="info-popup" id="i-day">Your active working hours during the day &mdash; when you are awake and providing care. NLW applies to every one of these hours.</div>
@@ -344,7 +95,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding
       <div class="fl">Hours worked per day
         <div class="info-wrap">
           <div class="info-btn" onclick="toggleInfo('i-hrs')">i</div>
-          <div class="info-popup" id="i-hrs">Industry standard is <strong>8&ndash;10 active hours per day</strong> with a minimum 2-hour daily break. Above 10 hours quality of care deteriorates. Above 12 hours is considered unsustainable for both carer and client. To give good care, you must first be able to care for yourself.</div>
+          <div class="info-popup" id="i-hrs">Industry standard is <strong>8&ndash;10 active hours per day</strong> with a minimum 2-hour daily break. Above 10 hours quality of care begins to deteriorate. Above 12 hours is considered unsustainable and unsafe for both carer and client. To give good care, you must first be able to care for yourself.</div>
         </div>
       </div>
       <div class="iw" id="hrsDayIw"><input type="number" id="hrsDay" inputmode="decimal" placeholder="0" min="1" max="24" step="0.5" style="text-align:center" autocomplete="off"><span class="suf">hrs/day</span></div>
@@ -354,7 +105,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding
       <div class="iw"><span class="pre">&pound;</span><input type="number" id="expenses" inputmode="decimal" placeholder="0" min="0" step="1" autocomplete="off"></div>
     </div>
   </div>
-  <!-- Full-width hours warning — only above 10, no gentle level -->
+  <!-- Full-width hours warning — amber above 10, red above 12 -->
   <div id="hrsWarn" class="hrs-warn"></div>
 </div>
 
@@ -373,21 +124,19 @@ footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding
   <div class="night-fields" id="nightFields">
     <div class="field-row">
       <div class="field">
-        <div class="fl night">
-          Total night calls this job
+        <div class="fl night">Total night calls this job
           <div class="info-wrap">
             <div class="info-btn" onclick="toggleInfo('i-calls')">i</div>
-            <div class="info-popup" id="i-calls">Total times you were called during the night across the whole job &mdash; actual count or honest estimate. Night calls are erratic so totalling them across the job is more accurate than a per-night average.</div>
+            <div class="info-popup" id="i-calls">Total times you were called during the night across the whole job &mdash; actual count or honest estimate. Night calls are erratic so totalling them is more accurate than a per-night average.</div>
           </div>
         </div>
         <div class="iw night-iw"><input type="number" id="totalCalls" inputmode="decimal" placeholder="0" min="0" step="1" style="text-align:center" autocomplete="off"><span class="suf">calls</span></div>
       </div>
       <div class="field">
-        <div class="fl night">
-          Charge per call
+        <div class="fl night">Charge per call
           <div class="info-wrap">
             <div class="info-btn" onclick="toggleInfo('i-charge')">i</div>
-            <div class="info-popup right" id="i-charge">What you charge each time you are called. Together with the time per call this determines your effective hourly rate for night calls &mdash; which must be at or above NLW.</div>
+            <div class="info-popup right" id="i-charge">What you charge each time you are called. Together with time per call this determines your effective hourly rate for night calls &mdash; which must be at or above NLW.</div>
           </div>
         </div>
         <div class="iw night-iw"><span class="pre">&pound;</span><input type="number" id="chargePerCall" inputmode="decimal" placeholder="0" min="0" step="1" autocomplete="off"></div>
@@ -395,8 +144,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding
     </div>
     <div class="field-row" style="margin-bottom:0">
       <div class="field">
-        <div class="fl night">
-          Avg time per call
+        <div class="fl night">Avg time per call
           <div class="info-wrap">
             <div class="info-btn" onclick="toggleInfo('i-time')">i</div>
             <div class="info-popup" id="i-time">How long each call takes on average &mdash; from when you wake to when you return to bed. NLW must apply to every minute of active call time.</div>
@@ -405,26 +153,30 @@ footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding
         <div class="iw night-iw"><input type="number" id="minsPerCall" inputmode="decimal" placeholder="0" min="1" step="5" style="text-align:center" autocomplete="off"><span class="suf">mins</span></div>
       </div>
       <div class="field" style="display:flex;align-items:flex-end">
-        <div class="night-summary-pill" id="nightSummary" style="width:100%">&mdash;</div>
+        <div class="night-sum-pill" id="nightSummary">&mdash;</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Results injected here -->
+<!-- Results injected by JS -->
 <div id="resultsArea"></div>
 
-
-<div class="wtr-card" id="wtrCard" style="display:none">
+<!-- WTR comparison card — visible only when hrs > 10, toggled by JS -->
+<div class="wtr-card" id="wtrCard">
   <div class="wtr-header" onclick="toggleWtr()">
     <div class="wtr-hl">
       <div class="wtr-icon">&#9878;</div>
-      <div><div class="wtr-title">Working Time Regulations</div><div class="wtr-sub">Employed rights vs self-employed reality</div></div>
+      <div>
+        <div class="wtr-title">Working Time Regulations</div>
+        <div class="wtr-sub">Employed rights vs self-employed reality</div>
+      </div>
     </div>
     <span class="wtr-chev" id="wtrChev">&#9660;</span>
   </div>
   <div class="wtr-body" id="wtrBody">
     <div class="wtr-inner">
+
       <div class="wtr-sh">Legal entitlements comparison</div>
       <div class="wtr-cols">
         <div class="wtr-ch" style="background:var(--bg)"></div>
@@ -439,6 +191,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding
       <div class="wtr-row"><div class="wc topic">Holiday pay</div><div class="wc good">5.6 weeks paid leave</div><div class="wc bad">No entitlement</div></div>
       <div class="wtr-row"><div class="wc topic">Sick pay</div><div class="wc good">SSP &pound;116.75/wk</div><div class="wc bad">No entitlement</div></div>
       <div class="wtr-row"><div class="wc topic">NLW protection</div><div class="wc good">Legally enforceable</div><div class="wc amber">Not legally enforceable &mdash; but your cash rate should still meet NLW as a professional standard</div></div>
+
       <div class="wtr-sh">Your health &amp; safety as a carer</div>
       <div class="sc-box">
         <div class="sc-title">To give good care, you must first be able to care for yourself</div>
@@ -446,17 +199,19 @@ footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding
         <div class="sc-row"><div class="sc-dot"></div><span>Medication errors and missed observations are significantly more likely when a carer is overworked</span></div>
         <div class="sc-row"><div class="sc-dot"></div><span>Compassion fatigue sets in gradually &mdash; often before a carer realises it is happening</span></div>
         <div class="sc-row"><div class="sc-dot"></div><span>The 8&ndash;10 hour standard protects both you and your client &mdash; it exists for a reason</span></div>
-        <div class="sc-row"><div class="sc-dot"></div><span>Regular breaks, adequate sleep and time outside are professional requirements, not luxuries</span></div>
+        <div class="sc-row"><div class="sc-dot"></div><span>Regular breaks, adequate sleep and time outside the home are professional requirements, not luxuries</span></div>
       </div>
+
       <div class="wtr-sh">Know your rights &mdash; and stand by them</div>
       <div class="wtr-rights">
         <div class="wtr-rt">You may not have the same legal protections &mdash; but you still have rights</div>
-        <p>Although self-employed carers are not covered by the Working Time Regulations, you are still entitled to negotiate fair working arrangements. <strong>Agreeing hours in writing before a placement starts</strong> is your strongest protection. If a client or family asks you to work beyond what was agreed, you are entitled to decline or renegotiate your terms. <strong>Your wellbeing is not separate from the quality of care you provide &mdash; it is part of it.</strong> A placement that requires more than 10 hours of active care per day should be documented clearly and reflected in your rate. You have the right to set boundaries, take your breaks, and protect your health &mdash; for your sake and your client&rsquo;s.</p>
+        <p>Although self-employed carers are not covered by the Working Time Regulations, you are still entitled to negotiate fair working arrangements. <strong>Agreeing hours in writing before a placement starts</strong> is your strongest protection. If a client or family asks you to work beyond what was agreed, you are entitled to decline or renegotiate your terms. <strong>Your wellbeing is not separate from the quality of care you provide &mdash; it is part of it.</strong> A placement requiring more than 10 hours of active care per day should be documented clearly and reflected in your rate. You have the right to set boundaries, take your breaks, and protect your health &mdash; for your sake and your client&rsquo;s.</p>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Accommodation offset reference -->
 <div class="acc-btn" id="accBtn" style="display:none" onclick="toggleAcc()">
   <span id="accBtnTxt">&#9660; accommodation offset reference</span>
 </div>
@@ -469,253 +224,6 @@ footer{background:var(--navy);color:rgba(255,255,255,.35);font-size:10px;padding
 <footer>For guidance only &middot; not financial or legal advice &middot; stufish-git.github.io/WageCheck</footer>
 
 </div><!-- .shell -->
-<script>
-var NLW={'2022/23':9.50,'2023/24':10.42,'2024/25':11.44,'2025/26':12.21,'2026/27':12.71,'2027/28':12.65};
-var ACC={'2022/23':8.70,'2023/24':9.10,'2024/25':9.99,'2025/26':10.66,'2026/27':11.10,'2027/28':11.10};
-var TAX={
-  '2022/23':{basic:.20,higher:.40,c4main:.0973,c2weekly:3.15,c2paid:false},
-  '2023/24':{basic:.20,higher:.40,c4main:.09,  c2weekly:3.45,c2paid:false},
-  '2024/25':{basic:.20,higher:.40,c4main:.06,  c2weekly:3.45,c2paid:true},
-  '2025/26':{basic:.20,higher:.40,c4main:.06,  c2weekly:3.45,c2paid:true},
-  '2026/27':{basic:.20,higher:.40,c4main:.06,  c2weekly:3.45,c2paid:true},
-  '2027/28':{basic:.20,higher:.40,c4main:.06,  c2weekly:3.45,c2paid:true}
-};
-var yr='2026/27',bracket='basic',nightOn=false,accOpen=false,wtrOpen=false,mencapOpen=false;
-var openDeds={it:false,c4:false,c2:false};
-var fmt=function(n,dp){dp=dp===undefined?2:dp;return'\u00a3'+n.toFixed(dp).replace(/\B(?=(\d{3})+(?!\d))/g,',')};
-var pct=function(n){return(n*100).toFixed(0)+'%'};
-var el=function(id){return document.getElementById(id)};
-
-document.addEventListener('click',function(e){
-  if(!e.target.classList.contains('info-btn')){
-    document.querySelectorAll('.info-popup').forEach(function(p){p.classList.remove('active')});
-  }
-});
-function toggleInfo(id){
-  var p=el(id);var was=p.classList.contains('active');
-  document.querySelectorAll('.info-popup').forEach(function(x){x.classList.remove('active')});
-  if(!was)p.classList.add('active');
-}
-document.querySelectorAll('.yr-pill').forEach(function(p){
-  p.addEventListener('click',function(){
-    document.querySelectorAll('.yr-pill').forEach(function(x){x.classList.remove('on')});
-    p.classList.add('on');yr=p.getAttribute('data-yr');calc();
-  });
-});
-['dailyRate','numDays','hrsDay','expenses','totalCalls','chargePerCall','minsPerCall'].forEach(function(id){
-  var e=el(id);if(e)e.addEventListener('input',calc);
-});
-function setBracket(b){
-  bracket=b;
-  document.querySelectorAll('.bracket-btn').forEach(function(btn){btn.classList.remove('on')});
-  document.querySelector('[data-bracket="'+b+'"]').classList.add('on');
-  calc();
-}
-function toggleNight(){
-  nightOn=!nightOn;
-  el('nightFields').classList.toggle('open',nightOn);
-  el('ntSw').classList.toggle('on',nightOn);
-  el('ntIcon').classList.toggle('on',nightOn);
-  calc();
-}
-function toggleAcc(){
-  accOpen=!accOpen;
-  el('accPanel').classList.toggle('open',accOpen);
-  el('accBtnTxt').innerHTML=accOpen?'\u25b2 accommodation offset reference':'\u25bc accommodation offset reference';
-}
-function toggleWtr(){
-  wtrOpen=!wtrOpen;
-  el('wtrBody').classList.toggle('open',wtrOpen);
-  el('wtrChev').classList.toggle('open',wtrOpen);
-}
-function toggleMencap(){
-  mencapOpen=!mencapOpen;
-  var b=el('mencapBody'),c=el('mencapChev');
-  if(b)b.classList.toggle('open',mencapOpen);
-  if(c)c.classList.toggle('open',mencapOpen);
-}
-function toggleDed(id){
-  openDeds[id]=!openDeds[id];
-  var b=el('db-'+id),c=el('dc-'+id);
-  if(b)b.classList.toggle('open',openDeds[id]);
-  if(c)c.classList.toggle('open',openDeds[id]);
-}
-
-
-function updateHrsWarn(hrs){
-  var w=el('hrsWarn'),iw=el('hrsDayIw');
-  if(iw)iw.style.borderColor='';
-  if(!w){return;}
-  if(!hrs||hrs<=10){w.style.display='none';w.className='hrs-warn';return;}
-  var cls,msg;
-  if(hrs>12){
-    cls='serious';
-    if(iw)iw.style.borderColor='#E24B4A';
-    msg='<strong>Serious: '+hrs+' hrs/day</strong> — this exceeds the 12-hour maximum considered safe for sustained live-in care. At this level fatigue will impair your judgement, patience and ability to give good care. This arrangement puts both you and your client at risk. See the Working Time comparison below.';
-  } else {
-    cls='hard';
-    if(iw)iw.style.borderColor='#EF9F27';
-    msg='<strong>Above recommended: '+hrs+' hrs/day</strong> — the sector standard is 8–10 active hours with a 2-hour daily break. At this level your wellbeing and quality of care will be affected over a sustained placement. To care well for others, you must first be able to care for yourself. See the Working Time comparison below.';
-  }
-  w.className='hrs-warn '+cls;
-  w.innerHTML=msg;
-  w.style.display='block';
-}
-
-
-function verdictBlock(label,rate,nlw,sub){
-  var diff=rate-nlw,s=diff>=0?'above':(diff>=-1?'close':'below');
-  var badge={above:'Above NLW',close:'Just below NLW',below:'Below NLW'}[s];
-  return '<div class="nlw-verdict '+s+'">'
-    +'<div><div class="nv-label">'+label+'</div><div class="nv-rate">'+fmt(rate)+'/hr</div>'+(sub?'<div class="nv-sub">'+sub+'</div>':'')+'</div>'
-    +'<div class="nv-badge">'+badge+'</div></div>';
-}
-
-function calc(){
-  var rate=parseFloat(el('dailyRate').value)||0;
-  var days=parseFloat(el('numDays').value)||0;
-  var hrs=parseFloat(el('hrsDay').value)||0;
-  updateHrsWarn(hrs);
-  var exp=parseFloat(el('expenses').value)||0;
-  var area=el('resultsArea'),accBtn=el('accBtn');
-
-  if(!rate||!days||!hrs){
-    area.innerHTML='<div class="card" style="margin:.625rem .625rem 0"><div class="empty"><div class="empty-icon">&#9998;</div>Enter job details above to check against NLW</div></div>';
-    accBtn.style.display='none';return;
-  }
-
-  var nlw=NLW[yr];
-  var dayPay=rate*days,dayHrs=hrs*days,dayRate=dayPay/dayHrs;
-  var dayDiff=dayRate-nlw,dayStatus=dayDiff>=0?'above':(dayDiff>=-1?'close':'below');
-  var dayNeed=dayStatus!=='above'
-    ?'<div class="need '+dayStatus+'">To meet NLW you need <strong>'+fmt(nlw*hrs)+'/day</strong> ('+fmt(nlw*dayHrs)+' total for this job).</div>':'';
-
-  var totalCalls=0,chargePerCall=0,minsPerCall=0,nightPay=0,nightHrs=0,nightRate=0,nightStatus='';
-  if(nightOn){
-    totalCalls=parseFloat(el('totalCalls').value)||0;
-    chargePerCall=parseFloat(el('chargePerCall').value)||0;
-    minsPerCall=parseFloat(el('minsPerCall').value)||0;
-    nightPay=totalCalls*chargePerCall;
-    nightHrs=totalCalls*(minsPerCall/60);
-    nightRate=nightHrs>0?nightPay/nightHrs:0;
-    var nd=nightRate-nlw;nightStatus=nd>=0?'above':(nd>=-1?'close':'below');
-    var sp=el('nightSummary');
-    if(sp)sp.textContent=totalCalls+' calls \u00d7 '+minsPerCall+' min = '+nightHrs.toFixed(1)+' hrs active';
-  }
-
-  var totalPay=dayPay+nightPay,totalHrs=dayHrs+nightHrs;
-  var taxProfit=Math.max(0,totalPay-exp),weeks=days/7;
-  var ty=TAX[yr];
-  var itRate=bracket==='none'?0:(bracket==='basic'?ty.basic:ty.higher);
-  var propTax=taxProfit*itRate,propC4=bracket==='none'?0:taxProfit*ty.c4main;
-  var c2paid=ty.c2paid,propC2=c2paid?0:ty.c2weekly*weeks;
-  var takeHome=taxProfit-propTax-propC4-propC2,afterTaxHr=totalHrs>0?takeHome/totalHrs:0;
-
-  /* ── Section 1: Daytime ── */
-  var sec1='<div class="card" style="margin:.625rem .625rem 0">'
-    +'<div class="slabel">&#9788;\u00a0 Daytime hours</div>'
-    +'<div class="metrics">'
-    +'<div class="metric"><div class="ml">Total pay</div><div class="mv">'+fmt(dayPay,0)+'</div></div>'
-    +'<div class="metric"><div class="ml">Total hours</div><div class="mv">'+(dayHrs%1===0?dayHrs:dayHrs.toFixed(1))+'\u00a0hrs</div></div>'
-    +'<div class="metric"><div class="ml">Hourly rate</div><div class="mv">'+fmt(dayRate)+'/hr</div></div>'
-    +'</div>'
-    +verdictBlock('Daytime rate',dayRate,nlw,fmt(Math.abs(dayDiff))+'/hr '+(dayDiff>=0?'above':'below')+' National Living Wage ('+fmt(nlw)+')')
-    +dayNeed+'</div>';
-
-  /* ── Section 2: Night calls ── */
-  var sec2='';
-  if(nightOn&&totalCalls>0&&chargePerCall>0&&minsPerCall>0){
-    var nlwPerCall=nlw*(minsPerCall/60);
-    var nightNeed=nightStatus!=='above'
-      ?'<div class="need '+nightStatus+'">To meet NLW at '+minsPerCall+'\u00a0min/call you need <strong>'+fmt(nlwPerCall)+' per call</strong>.</div>':'';
-    sec2='<div class="card night-tint" style="margin:.625rem .625rem 0">'
-      +'<div class="slabel night">&#9790;\u00a0 Night calls</div>'
-      +'<div class="metrics">'
-      +'<div class="metric"><div class="ml">Total pay</div><div class="mv">'+fmt(nightPay,0)+'</div></div>'
-      +'<div class="metric"><div class="ml">Active hours</div><div class="mv">'+nightHrs.toFixed(1)+'\u00a0hrs</div></div>'
-      +'<div class="metric"><div class="ml">Effective rate</div><div class="mv">'+fmt(nightRate)+'/hr</div></div>'
-      +'</div>'
-      +verdictBlock('Night call rate',nightRate,nlw,totalCalls+' calls \u00d7 '+fmt(chargePerCall,0)+'/call \u00d7 '+minsPerCall+'\u00a0min')
-      +nightNeed
-      +'<div class="mencap-toggle" onclick="toggleMencap()">'
-      +'<span class="mencap-label">&#9432;\u00a0 Mencap ruling 2021 \u2014 sleep-in hours explained</span>'
-      +'<span class="mencap-chev" id="mencapChev">\u25bc</span>'
-      +'</div>'
-      +'<div class="mencap-body" id="mencapBody">'
-      +'<div class="mencap-inner">Sleep-in hours \u2014 when you are on premises but not actively called \u2014 <strong>do not count as NMW time</strong> following the Supreme Court ruling in <em>Mencap\u00a0v\u00a0Tomlinson-Blake</em> [2021]. Only the time you are awake and actively responding to a call must be paid at or above NLW. Your charge per call applies to active time only.</div>'
-      +'</div>'
-      +'</div>';
-  }
-
-  /* ── Section 3: Combined ── */
-  var sec3='<div class="card navy-card" style="margin:.625rem .625rem 0">'
-    +'<div class="slabel light">Combined earnings</div>'
-    +'<div class="metrics">'
-    +'<div class="metric"><div class="ml">Total earnings</div><div class="mv">'+fmt(totalPay,0)+'</div></div>'
-    +'<div class="metric"><div class="ml">Total hours</div><div class="mv">'+totalHrs.toFixed(1)+'\u00a0hrs</div></div>'
-    +'<div class="metric"><div class="ml">Overall rate</div><div class="mv">'+fmt(totalPay/totalHrs)+'/hr</div></div>'
-    +'</div>'
-    +'<div class="combined-th">'
-    +'<div><div class="cth-label">Est. take-home this job</div><div class="cth-sub">'+fmt(afterTaxHr)+'/hr after tax \u00b7 '+bracket+' rate</div></div>'
-    +'<div class="cth-val">'+fmt(takeHome)+'</div>'
-    +'</div></div>';
-
-  /* ── Tax card ── */
-  var itAmt=bracket==='none'?'<span class="ded-amt zero">\u00a30.00</span>':'<span class="ded-amt">\u2212'+fmt(propTax)+'</span>';
-  var c4Amt=bracket==='none'?'<span class="ded-amt zero">\u00a30.00</span>':'<span class="ded-amt">\u2212'+fmt(propC4)+'</span>';
-  var c2Amt=c2paid?'<span class="ded-amt free">No cost</span>':(propC2>0?'<span class="ded-amt">\u2212'+fmt(propC2)+'</span>':'<span class="ded-amt zero">\u00a30.00</span>');
-  var c2Body=c2paid
-    ?'<div class="drow"><span>From 2024/25</span><span class="dr green">Treated as paid automatically</span></div><div class="drow"><span>Cost</span><span class="dr zero">\u00a30.00</span></div><div class="dnote">From April 2024 Class\u00a02\u00a0NI is treated as automatically paid if annual profits exceed \u00a312,570. You receive full state pension credits at no cost.</div>'
-    :'<div class="drow"><span>Rate</span><span class="dr">'+fmt(ty.c2weekly)+'/week</span></div><div class="drow"><span>Weeks this job</span><span class="dr">'+weeks.toFixed(1)+'\u00a0wks</span></div><div class="drow"><span>Cost</span><span class="dr neg">\u2212'+fmt(propC2)+'</span></div><div class="dnote">Flat weekly rate. Buys state pension credits.</div>';
-
-  var taxCard='<div class="card" style="margin:.625rem .625rem 0">'
-    +'<div class="slabel">Estimated deductions \u2014 self-employed</div>'
-    +(exp>0
-      ?'<div class="total-row"><span class="tl">Gross earnings</span><span class="tv">'+fmt(totalPay)+'</span></div>'
-       +'<div class="total-row"><span class="tl">Expenses deducted</span><span class="tv-neg">\u2212'+fmt(exp)+'</span></div>'
-       +'<div class="total-row" style="border-top:.5px solid var(--border-light);padding-top:5px;margin-top:2px"><span class="tl">Taxable profit</span><span class="tv">'+fmt(taxProfit)+'</span></div>'
-      :'<div class="total-row"><span class="tl">Taxable profit</span><span class="tv">'+fmt(taxProfit)+'</span></div>')
-    +'<div style="margin-top:.5rem">'
-    +'<div class="ded-block"><div class="ded-header" onclick="toggleDed(\'it\')"><span class="ded-name">Income tax</span><div class="ded-right">'+itAmt+'<span class="ded-chev" id="dc-it">\u25bc</span></div></div>'
-    +'<div class="ded-body" id="db-it"><div class="ded-inner"><div class="drow"><span>Bracket</span><span class="dr">'+(bracket==='none'?'No tax':bracket==='basic'?'Basic 20%':'Higher 40%')+'</span></div>'+(bracket!=='none'?'<div class="drow"><span>Tax this job</span><span class="dr neg">\u2212'+fmt(propTax)+'</span></div>':'')+'<div class="dnote">Applied at your selected bracket rate directly to this job\'s taxable earnings.</div></div></div></div>'
-    +'<div class="ded-block"><div class="ded-header" onclick="toggleDed(\'c4\')"><span class="ded-name">Class\u00a04\u00a0NI</span><div class="ded-right">'+c4Amt+'<span class="ded-chev" id="dc-c4">\u25bc</span></div></div>'
-    +'<div class="ded-body" id="db-c4"><div class="ded-inner"><div class="drow"><span>Rate ('+yr+')</span><span class="dr">'+pct(ty.c4main)+'</span></div>'+(bracket!=='none'?'<div class="drow"><span>Class\u00a04 this job</span><span class="dr neg">\u2212'+fmt(propC4)+'</span></div>':'')+'<div class="dnote">Main NI contribution for self-employed workers. Not applied in no-tax bracket.</div></div></div></div>'
-    +'<div class="ded-block"><div class="ded-header" onclick="toggleDed(\'c2\')"><span class="ded-name">Class\u00a02\u00a0NI</span><div class="ded-right">'+c2Amt+'<span class="ded-chev" id="dc-c2">\u25bc</span></div></div>'
-    +'<div class="ded-body" id="db-c2"><div class="ded-inner">'+c2Body+'</div></div></div>'
-    +'</div>'
-    +'<div class="est-note">Tax applied at your selected bracket directly to this job\'s earnings. No annualisation. Adjust your bracket above if your situation changes.</div>'
-    +'</div>';
-
-  /* ── Rights card ── */
-  var showRights=dayStatus==='below'||dayStatus==='close'||(nightOn&&(nightStatus==='below'||nightStatus==='close'));
-  var rightsCard=showRights
-    ?'<div class="rights-card">'
-     +'<div class="rights-header"><div class="rights-icon">!</div><div><div class="rights-title">Your pay is below National Living Wage</div><div class="rights-sub">Know your rights as a self-employed carer</div></div></div>'
-     +'<div class="rights-point red"><div class="rp-title">The accommodation offset cannot make up the shortfall</div><p>If an agency or client argues that free accommodation brings your pay above NLW \u2014 this does not hold. The HMRC accommodation offset is an employer/employee mechanism only. It has no legal application to self-employed workers.</p></div>'
-     +'<div class="rights-point navy"><div class="rp-title">Where to get help</div><p>ACAS runs a free helpline for pay disputes. HMRC has a National Minimum Wage complaints process. Citizens Advice can help with your employment status and rights.</p></div>'
-     +'<div class="rights-links"><a class="rights-link" href="https://www.acas.org.uk/national-minimum-wage" target="_blank" rel="noopener">ACAS \u2197</a><a class="rights-link" href="https://www.gov.uk/pay-and-work-rights" target="_blank" rel="noopener">HMRC \u2197</a><a class="rights-link" href="https://www.citizensadvice.org.uk/work/rights-at-work/pay/" target="_blank" rel="noopener">Citizens Advice \u2197</a></div>'
-     +'</div>'
-    :'';
-
-  /* ── Acc reference ── */
-  var accDay=ACC[yr],accHr=hrs>0?accDay/hrs:0,pkgHr=(dayPay+nightPay)/totalHrs+accHr;
-  el('refRows').innerHTML=
-    '<div class="ref-row"><span class="rl">HMRC offset rate ('+yr+')</span><span class="rv">'+fmt(accDay)+'/day</span></div>'
-    +'<div class="ref-row"><span class="rl">Offset per hour (at '+hrs+'\u00a0hrs/day)</span><span class="rv">'+fmt(accHr)+'/hr</span></div>'
-    +'<div class="ref-row"><span class="rl">Day rate + offset</span><span class="rv" style="color:'+(dayRate+accHr>=nlw?'var(--green-dark)':'var(--red-dark)')+'">'+fmt(dayRate+accHr)+'/hr</span></div>'
-    +'<div class="ref-row"><span class="rl">National Living Wage ('+yr+')</span><span class="rv">'+fmt(nlw)+'/hr</span></div>';
-
-  area.innerHTML=sec1+sec2+sec3+taxCard+rightsCard;
-  accBtn.style.display='flex';
-  mencapOpen=false;
-  ['it','c4','c2'].forEach(function(id){
-    if(openDeds[id]){var b=el('db-'+id),c=el('dc-'+id);if(b)b.classList.add('open');if(c)c.classList.add('open')}
-  });
-}
-
-if('serviceWorker' in navigator){
-  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
-}
-</script>
+<script src="app.js"></script>
 </body>
 </html>
