@@ -1,4 +1,4 @@
-var CACHE = 'wagecheck-v1.4.0';
+var CACHE  = 'wagecheck-v2.0.0';
 var ASSETS = [
   '/WageCheck/',
   '/WageCheck/index.html',
@@ -49,9 +49,7 @@ self.addEventListener('fetch', function(e) {
           return response;
         }
         var clone = response.clone();
-        caches.open(CACHE).then(function(cache) {
-          cache.put(e.request, clone);
-        });
+        caches.open(CACHE).then(function(cache) { cache.put(e.request, clone); });
         return response;
       }).catch(function() {
         return caches.match('/WageCheck/index.html');

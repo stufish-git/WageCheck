@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#1B2F5E">
-<meta name="description" content="Check if your live-in care job pays above National Living Wage. Self-employed tax estimate included.">
+<meta name="description" content="Check National Living Wage compliance and estimate self-employed tax for live-in care jobs.">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="WageCheck">
@@ -14,7 +15,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
 <link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
-<link rel="apple-touch-icon" sizes="76x76"  href="icon-76.png">
+<link rel="apple-touch-icon" sizes="76x76" href="icon-76.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
@@ -24,204 +25,261 @@
 <body>
 <div class="shell">
 
-<header>
-  <div>
-    <div class="logo">WageCheck</div>
-    <div class="logo-sub">National Living Wage &middot; self-employed</div>
-  </div>
-  <div class="ver-badge">v1.4.0</div>
-</header>
-
-<!-- 1. Tax year -->
-<div class="card">
-  <div class="slabel">Tax year</div>
-  <div class="yr-pills" id="yrPills">
-    <div class="yr-pill" data-yr="2022/23">2022/23</div>
-    <div class="yr-pill" data-yr="2023/24">2023/24</div>
-    <div class="yr-pill" data-yr="2024/25">2024/25</div>
-    <div class="yr-pill" data-yr="2025/26">2025/26</div>
-    <div class="yr-pill on" data-yr="2026/27">2026/27</div>
-    <div class="yr-pill" data-yr="2027/28">2027/28 <span style="font-size:9px;opacity:.7">est.</span></div>
-  </div>
+<!-- ── Sticky header + nav ── -->
+<div class="sticky-top">
+  <header>
+    <div>
+      <div class="logo">WageCheck</div>
+      <div class="logo-sub">Live-in care &middot; self-employed</div>
+    </div>
+    <div class="ver-badge">v2.0.0</div>
+  </header>
+  <nav class="tab-nav">
+    <div class="tn-tab on" id="tab1" onclick="switchTab(1)">NLW Checker</div>
+    <div class="tn-tab" id="tab2" onclick="switchTab(2)">Quick Tax</div>
+    <div class="tn-tab" id="tab3" onclick="switchTab(3)">Tax Planner</div>
+  </nav>
 </div>
 
-<!-- 2. Tax situation -->
-<div class="card">
-  <div class="slabel">Your tax situation this year
-    <div class="info-wrap">
-      <div class="info-btn" onclick="toggleInfo('i-bracket')">i</div>
-      <div class="info-popup" id="i-bracket">Select the income tax band for your total self-employed earnings this year. Tax is applied at this rate directly to this job&rsquo;s earnings &mdash; no annualisation used.</div>
-    </div>
-  </div>
-  <div class="bracket-grid">
-    <div class="bracket-btn none" data-bracket="none" onclick="setBracket('none')">
-      <div class="b-title">No tax</div>
-      <div class="b-sub">Under &pound;12,570/yr</div>
-      <div class="b-rate">0%</div>
-    </div>
-    <div class="bracket-btn basic on" data-bracket="basic" onclick="setBracket('basic')">
-      <div class="b-title">Basic rate</div>
-      <div class="b-sub">&pound;12,570&ndash;&pound;50,270</div>
-      <div class="b-rate">20%</div>
-    </div>
-    <div class="bracket-btn higher" data-bracket="higher" onclick="setBracket('higher')">
-      <div class="b-title">Higher rate</div>
-      <div class="b-sub">Above &pound;50,270</div>
-      <div class="b-rate">40%</div>
-    </div>
-  </div>
-</div>
+<!-- ══════════════════════════════════════════
+     TAB 1: NLW CHECKER
+══════════════════════════════════════════ -->
+<div class="panel on" id="panel1">
 
-<!-- 3. Daytime hours -->
-<div class="card">
-  <div class="slabel">Daytime hours
-    <div class="info-wrap">
-      <div class="info-btn" onclick="toggleInfo('i-day')">i</div>
-      <div class="info-popup" id="i-day">Your active working hours during the day &mdash; when you are awake and providing care. NLW applies to every one of these hours.</div>
+  <!-- Tax year -->
+  <div class="card">
+    <div class="slabel">Tax year</div>
+    <div class="yr-pills">
+      <div class="yr-pill" data-yr="2022/23">2022/23</div>
+      <div class="yr-pill" data-yr="2023/24">2023/24</div>
+      <div class="yr-pill" data-yr="2024/25">2024/25</div>
+      <div class="yr-pill" data-yr="2025/26">2025/26</div>
+      <div class="yr-pill on" data-yr="2026/27">2026/27</div>
+      <div class="yr-pill" data-yr="2027/28">2027/28 <span style="font-size:9px;opacity:.6">est.</span></div>
     </div>
   </div>
-  <div class="field-row">
-    <div class="field">
-      <div class="fl">Daily rate</div>
-      <div class="iw"><span class="pre">&pound;</span><input type="number" id="dailyRate" inputmode="decimal" placeholder="0" min="0" step="1" autocomplete="off"><span class="suf">/day</span></div>
-    </div>
-    <div class="field">
-      <div class="fl">Number of days</div>
-      <div class="iw"><input type="number" id="numDays" inputmode="decimal" placeholder="0" min="0.5" step="0.5" style="text-align:center" autocomplete="off"><span class="suf">days</span></div>
-    </div>
-  </div>
-  <div class="field-row" style="margin-bottom:0">
-    <div class="field">
-      <div class="fl">Hours worked per day
-        <div class="info-wrap">
-          <div class="info-btn" onclick="toggleInfo('i-hrs')">i</div>
-          <div class="info-popup" id="i-hrs">Industry standard is <strong>8&ndash;10 active hours per day</strong> with a minimum 2-hour daily break. Above 10 hours quality of care begins to deteriorate. Above 12 hours is considered unsustainable and unsafe for both carer and client. To give good care, you must first be able to care for yourself.</div>
-        </div>
-      </div>
-      <div class="iw" id="hrsDayIw"><input type="number" id="hrsDay" inputmode="decimal" placeholder="0" min="1" max="24" step="0.5" style="text-align:center" autocomplete="off"><span class="suf">hrs/day</span></div>
-    </div>
-    <div class="field">
-      <div class="fl">Expenses (optional)</div>
-      <div class="iw"><span class="pre">&pound;</span><input type="number" id="expenses" inputmode="decimal" placeholder="0" min="0" step="1" autocomplete="off"></div>
-    </div>
-  </div>
-  <!-- Full-width hours warning — amber above 10, red above 12 -->
-  <div id="hrsWarn" class="hrs-warn"></div>
-</div>
 
-<!-- 4. Night calls -->
-<div class="card night-tint">
-  <div class="night-toggle-row" onclick="toggleNight()">
-    <div class="nt-left">
-      <div class="nt-icon" id="ntIcon">&#9790;</div>
-      <div>
-        <div class="nt-title">Night calls</div>
-        <div class="nt-sub">Add waking night charges for this job</div>
+  <!-- Daytime hours -->
+  <div class="card">
+    <div class="slabel">Daytime hours
+      <div class="info-wrap">
+        <div class="info-btn" onclick="toggleInfo('i-day')">i</div>
+        <div class="info-popup" id="i-day">Your active working hours during the day &mdash; when you are awake and providing care. NLW applies to every one of these hours.</div>
       </div>
     </div>
-    <div class="nt-sw" id="ntSw"></div>
-  </div>
-  <div class="night-fields" id="nightFields">
     <div class="field-row">
       <div class="field">
-        <div class="fl night">Total night calls this job
-          <div class="info-wrap">
-            <div class="info-btn" onclick="toggleInfo('i-calls')">i</div>
-            <div class="info-popup" id="i-calls">Total times you were called during the night across the whole job &mdash; actual count or honest estimate. Night calls are erratic so totalling them is more accurate than a per-night average.</div>
-          </div>
-        </div>
-        <div class="iw night-iw"><input type="number" id="totalCalls" inputmode="decimal" placeholder="0" min="0" step="1" style="text-align:center" autocomplete="off"><span class="suf">calls</span></div>
+        <div class="fl">Daily rate</div>
+        <div class="iw"><span class="pre">&pound;</span><input type="number" id="dailyRate" inputmode="decimal" placeholder="0" min="0" step="1" autocomplete="off"><span class="suf">/day</span></div>
       </div>
       <div class="field">
-        <div class="fl night">Charge per call
-          <div class="info-wrap">
-            <div class="info-btn" onclick="toggleInfo('i-charge')">i</div>
-            <div class="info-popup right" id="i-charge">What you charge each time you are called. Together with time per call this determines your effective hourly rate for night calls &mdash; which must be at or above NLW.</div>
-          </div>
-        </div>
-        <div class="iw night-iw"><span class="pre">&pound;</span><input type="number" id="chargePerCall" inputmode="decimal" placeholder="0" min="0" step="1" autocomplete="off"></div>
+        <div class="fl">Number of days</div>
+        <div class="iw"><input type="number" id="numDays" inputmode="decimal" placeholder="0" min="0.5" step="0.5" style="text-align:center" autocomplete="off"><span class="suf">days</span></div>
       </div>
     </div>
     <div class="field-row" style="margin-bottom:0">
       <div class="field">
-        <div class="fl night">Avg time per call
+        <div class="fl">Hours worked per day
           <div class="info-wrap">
-            <div class="info-btn" onclick="toggleInfo('i-time')">i</div>
-            <div class="info-popup" id="i-time">How long each call takes on average &mdash; from when you wake to when you return to bed. NLW must apply to every minute of active call time.</div>
+            <div class="info-btn" onclick="toggleInfo('i-hrs')">i</div>
+            <div class="info-popup" id="i-hrs">Industry standard is <strong>8&ndash;10 active hours per day</strong> with a minimum 2-hour daily break. Above 10 hrs quality of care begins to deteriorate. Above 12 hrs is considered unsafe for both carer and client. To give good care, you must first be able to care for yourself.</div>
           </div>
         </div>
-        <div class="iw night-iw"><input type="number" id="minsPerCall" inputmode="decimal" placeholder="0" min="1" step="5" style="text-align:center" autocomplete="off"><span class="suf">mins</span></div>
+        <div class="iw" id="hrsDayIw"><input type="number" id="hrsDay" inputmode="decimal" placeholder="0" min="1" max="24" step="0.5" style="text-align:center" autocomplete="off"><span class="suf">hrs/day</span></div>
       </div>
-      <div class="field" style="display:flex;align-items:flex-end">
-        <div class="night-sum-pill" id="nightSummary">&mdash;</div>
+      <div class="field">
+        <div class="fl">Job expenses (optional)</div>
+        <div class="iw"><span class="pre">&pound;</span><input type="number" id="expenses" inputmode="decimal" placeholder="0" min="0" step="1" autocomplete="off"></div>
+      </div>
+    </div>
+    <!-- Full-width hours warning — amber above 10, red above 12 -->
+    <div id="hrsWarn" class="hrs-warn"></div>
+  </div>
+
+  <!-- Night calls -->
+  <div class="card night-tint">
+    <div class="night-toggle-row" onclick="toggleNight()">
+      <div class="nt-left">
+        <div class="nt-icon" id="ntIcon">&#9790;</div>
+        <div>
+          <div class="nt-title">Night calls</div>
+          <div class="nt-sub">Add waking night charges for this job</div>
+        </div>
+      </div>
+      <div class="nt-sw" id="ntSw"></div>
+    </div>
+    <div class="night-fields" id="nightFields">
+      <div class="field-row">
+        <div class="field">
+          <div class="fl night">Total night calls this job
+            <div class="info-wrap">
+              <div class="info-btn" onclick="toggleInfo('i-calls')">i</div>
+              <div class="info-popup" id="i-calls">Total times you were called during the night across the whole job &mdash; actual count or honest estimate. Night calls are erratic so totalling them across the job is more accurate than a per-night average.</div>
+            </div>
+          </div>
+          <div class="iw night-iw"><input type="number" id="totalCalls" inputmode="decimal" placeholder="0" min="0" step="1" style="text-align:center" autocomplete="off"><span class="suf">calls</span></div>
+        </div>
+        <div class="field">
+          <div class="fl night">Charge per call
+            <div class="info-wrap">
+              <div class="info-btn" onclick="toggleInfo('i-charge')">i</div>
+              <div class="info-popup right" id="i-charge">What you charge each time you are called. Together with time per call this determines your effective hourly rate for night calls &mdash; which must be at or above NLW.</div>
+            </div>
+          </div>
+          <div class="iw night-iw"><span class="pre">&pound;</span><input type="number" id="chargePerCall" inputmode="decimal" placeholder="0" min="0" step="1" autocomplete="off"></div>
+        </div>
+      </div>
+      <div class="field-row" style="margin-bottom:0">
+        <div class="field">
+          <div class="fl night">Avg time per call
+            <div class="info-wrap">
+              <div class="info-btn" onclick="toggleInfo('i-time')">i</div>
+              <div class="info-popup" id="i-time">How long each call takes on average &mdash; from when you wake to when you return to bed. NLW must apply to every minute of active call time.</div>
+            </div>
+          </div>
+          <div class="iw night-iw"><input type="number" id="minsPerCall" inputmode="decimal" placeholder="0" min="1" step="5" style="text-align:center" autocomplete="off"><span class="suf">mins</span></div>
+        </div>
+        <div class="field" style="display:flex;align-items:flex-end">
+          <div class="night-sum-pill" id="nightSummary">&mdash;</div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Results injected by JS -->
-<div id="resultsArea"></div>
+  <!-- NLW results injected here -->
+  <div id="resultsArea"></div>
 
-<!-- WTR comparison card — visible only when hrs > 10, toggled by JS -->
-<div class="wtr-card" id="wtrCard">
-  <div class="wtr-header" onclick="toggleWtr()">
-    <div class="wtr-hl">
-      <div class="wtr-icon">&#9878;</div>
-      <div>
-        <div class="wtr-title">Working Time Regulations</div>
-        <div class="wtr-sub">Employed rights vs self-employed reality</div>
+  <!-- WTR card — visible only when hrs > 10 -->
+  <div class="wtr-card" id="wtrCard">
+    <div class="wtr-header" onclick="toggleWtr()">
+      <div class="wtr-hl">
+        <div class="wtr-icon">&#9878;</div>
+        <div>
+          <div class="wtr-title">Working Time Regulations</div>
+          <div class="wtr-sub">Employed rights vs self-employed reality</div>
+        </div>
       </div>
+      <span class="wtr-chev" id="wtrChev">&#9660;</span>
     </div>
-    <span class="wtr-chev" id="wtrChev">&#9660;</span>
-  </div>
-  <div class="wtr-body" id="wtrBody">
-    <div class="wtr-inner">
-
-      <div class="wtr-sh">Legal entitlements comparison</div>
-      <div class="wtr-cols">
-        <div class="wtr-ch" style="background:var(--bg)"></div>
-        <div class="wtr-ch emp">Employed worker</div>
-        <div class="wtr-ch sep">Self-employed</div>
-      </div>
-      <div class="wtr-row"><div class="wc topic">Max weekly hours</div><div class="wc good">48 hrs/wk average</div><div class="wc bad">No legal limit</div></div>
-      <div class="wtr-row"><div class="wc topic">Daily rest</div><div class="wc good">11 hrs between shifts</div><div class="wc bad">No entitlement</div></div>
-      <div class="wtr-row"><div class="wc topic">Rest breaks</div><div class="wc good">20 min per 6 hrs worked</div><div class="wc bad">No entitlement</div></div>
-      <div class="wtr-row"><div class="wc topic">Weekly rest</div><div class="wc good">24 hrs off per week</div><div class="wc bad">No entitlement</div></div>
-      <div class="wtr-row"><div class="wc topic">Night work limit</div><div class="wc good">8 hrs avg per 24-hr period</div><div class="wc bad">No legal limit</div></div>
-      <div class="wtr-row"><div class="wc topic">Holiday pay</div><div class="wc good">5.6 weeks paid leave</div><div class="wc bad">No entitlement</div></div>
-      <div class="wtr-row"><div class="wc topic">Sick pay</div><div class="wc good">SSP &pound;116.75/wk</div><div class="wc bad">No entitlement</div></div>
-      <div class="wtr-row"><div class="wc topic">NLW protection</div><div class="wc good">Legally enforceable</div><div class="wc amber">Not legally enforceable &mdash; but your cash rate should still meet NLW as a professional standard</div></div>
-
-      <div class="wtr-sh">Your health &amp; safety as a carer</div>
-      <div class="sc-box">
-        <div class="sc-title">To give good care, you must first be able to care for yourself</div>
-        <div class="sc-row"><div class="sc-dot"></div><span>Fatigue impairs judgement, reaction time and emotional patience &mdash; all critical in a care setting</span></div>
-        <div class="sc-row"><div class="sc-dot"></div><span>Medication errors and missed observations are significantly more likely when a carer is overworked</span></div>
-        <div class="sc-row"><div class="sc-dot"></div><span>Compassion fatigue sets in gradually &mdash; often before a carer realises it is happening</span></div>
-        <div class="sc-row"><div class="sc-dot"></div><span>The 8&ndash;10 hour standard protects both you and your client &mdash; it exists for a reason</span></div>
-        <div class="sc-row"><div class="sc-dot"></div><span>Regular breaks, adequate sleep and time outside the home are professional requirements, not luxuries</span></div>
-      </div>
-
-      <div class="wtr-sh">Know your rights &mdash; and stand by them</div>
-      <div class="wtr-rights">
-        <div class="wtr-rt">You may not have the same legal protections &mdash; but you still have rights</div>
-        <p>Although self-employed carers are not covered by the Working Time Regulations, you are still entitled to negotiate fair working arrangements. <strong>Agreeing hours in writing before a placement starts</strong> is your strongest protection. If a client or family asks you to work beyond what was agreed, you are entitled to decline or renegotiate your terms. <strong>Your wellbeing is not separate from the quality of care you provide &mdash; it is part of it.</strong> A placement requiring more than 10 hours of active care per day should be documented clearly and reflected in your rate. You have the right to set boundaries, take your breaks, and protect your health &mdash; for your sake and your client&rsquo;s.</p>
+    <div class="wtr-body" id="wtrBody">
+      <div class="wtr-inner">
+        <div class="wtr-sh">Legal entitlements comparison</div>
+        <div class="wtr-cols">
+          <div class="wtr-ch" style="background:var(--bg)"></div>
+          <div class="wtr-ch emp">Employed worker</div>
+          <div class="wtr-ch sep">Self-employed</div>
+        </div>
+        <div class="wtr-row"><div class="wc topic">Max weekly hrs</div><div class="wc good">48 hrs/wk average</div><div class="wc bad">No legal limit</div></div>
+        <div class="wtr-row"><div class="wc topic">Daily rest</div><div class="wc good">11 hrs between shifts</div><div class="wc bad">No entitlement</div></div>
+        <div class="wtr-row"><div class="wc topic">Rest breaks</div><div class="wc good">20 min per 6 hrs worked</div><div class="wc bad">No entitlement</div></div>
+        <div class="wtr-row"><div class="wc topic">Weekly rest</div><div class="wc good">24 hrs off per week</div><div class="wc bad">No entitlement</div></div>
+        <div class="wtr-row"><div class="wc topic">Night work limit</div><div class="wc good">8 hrs avg per 24 hr</div><div class="wc bad">No legal limit</div></div>
+        <div class="wtr-row"><div class="wc topic">Holiday pay</div><div class="wc good">5.6 weeks per year</div><div class="wc bad">No entitlement</div></div>
+        <div class="wtr-row"><div class="wc topic">Sick pay</div><div class="wc good">SSP &pound;116.75/wk</div><div class="wc bad">No entitlement</div></div>
+        <div class="wtr-row"><div class="wc topic">NLW protection</div><div class="wc good">Legally enforceable</div><div class="wc amber">Not enforceable &mdash; but your cash rate should still meet NLW as a professional standard</div></div>
+        <div class="wtr-sh">Your health &amp; safety as a carer</div>
+        <div class="sc-box">
+          <div class="sc-title">To give good care, you must first be able to care for yourself</div>
+          <div class="sc-row"><div class="sc-dot"></div><span>Fatigue impairs judgement, reaction time and emotional patience &mdash; all critical in a care setting</span></div>
+          <div class="sc-row"><div class="sc-dot"></div><span>Medication errors and missed observations are significantly more likely when a carer is overworked</span></div>
+          <div class="sc-row"><div class="sc-dot"></div><span>Compassion fatigue sets in gradually &mdash; often before a carer realises it is happening</span></div>
+          <div class="sc-row"><div class="sc-dot"></div><span>The 8&ndash;10 hour standard protects both you and your client &mdash; it exists for a reason</span></div>
+          <div class="sc-row"><div class="sc-dot"></div><span>Regular breaks, adequate sleep and time outside are professional requirements, not luxuries</span></div>
+        </div>
+        <div class="wtr-sh">Know your rights &mdash; and stand by them</div>
+        <div class="wtr-rights">
+          <div class="wtr-rt">Not covered by the Working Time Regulations &mdash; but you still have rights</div>
+          <p><strong>Agree hours in writing before each placement starts.</strong> If a client or family asks you to work beyond what was agreed, you are entitled to decline or renegotiate. <strong>Your wellbeing is not separate from the quality of care you provide &mdash; it is part of it.</strong> A placement requiring more than 10 hours of active care per day should be documented clearly and reflected in your rate.</p>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Accommodation offset reference -->
+  <div class="acc-wrap" id="accWrap" style="display:none">
+    <span class="acc-trigger" id="accTrigger" onclick="toggleAcc()">&#9660; accommodation offset reference</span>
+  </div>
+  <div class="acc-panel" id="accPanel">
+    <div class="ref-slabel">For reference only &mdash; not applicable to self-employed</div>
+    <div id="refRows"></div>
+    <div class="ref-note">The HMRC accommodation offset applies to employed workers only. It cannot be claimed as a tax deduction by self-employed carers. Shown here as a package comparison reference only.</div>
+  </div>
+
+  <footer>For guidance only &middot; not financial or legal advice &middot; stufish-git.github.io/WageCheck</footer>
 </div>
 
-<!-- Accommodation offset reference -->
-<div class="acc-btn" id="accBtn" style="display:none" onclick="toggleAcc()">
-  <span id="accBtnTxt">&#9660; accommodation offset reference</span>
-</div>
-<div class="acc-panel" id="accPanel">
-  <div class="ref-slabel">For reference only &mdash; not applicable to self-employed</div>
-  <div id="refRows"></div>
-  <div class="ref-note">The HMRC accommodation offset applies to employed workers only. It cannot be claimed as a tax deduction by self-employed carers. Shown here as a package comparison reference only.</div>
+<!-- ══════════════════════════════════════════
+     TAB 2: QUICK TAX
+══════════════════════════════════════════ -->
+<div class="panel" id="panel2">
+
+  <div id="quickEarningsCard">
+    <div class="card">
+      <div class="no-data">&#9758;&nbsp; Complete the <strong>NLW Checker</strong> tab first &mdash; your job earnings carry through automatically.</div>
+    </div>
+  </div>
+
+  <div id="quickResults"></div>
+
+  <footer>For guidance only &middot; not financial or legal advice &middot; stufish-git.github.io/WageCheck</footer>
 </div>
 
-<footer>For guidance only &middot; not financial or legal advice &middot; stufish-git.github.io/WageCheck</footer>
+<!-- ══════════════════════════════════════════
+     TAB 3: TAX PLANNER
+══════════════════════════════════════════ -->
+<div class="panel" id="panel3">
+
+  <div id="advEarningsCard">
+    <div class="card">
+      <div class="no-data">&#9758;&nbsp; Complete the <strong>NLW Checker</strong> tab first &mdash; your job earnings carry through automatically.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="slabel">This tax year &mdash; before this job
+      <div class="info-wrap">
+        <div class="info-btn" onclick="toggleInfo('i-ytd')">i</div>
+        <div class="info-popup right" id="i-ytd">Your total self-employed income and allowable expenses from all other jobs so far this year, not including the current job. Used to correctly apply your personal allowance and determine your tax band.</div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <div class="fl">Income so far this year</div>
+        <div class="iw"><span class="pre">&pound;</span><input type="number" id="ytdIncome" inputmode="decimal" placeholder="0" oninput="calcAdv()" autocomplete="off"></div>
+      </div>
+      <div class="field">
+        <div class="fl">Expenses so far this year
+          <div class="info-wrap">
+            <div class="info-btn" onclick="toggleInfo('i-ytdexp')">i</div>
+            <div class="info-popup right" id="i-ytdexp">Allowable self-employed expenses from all other jobs this year: travel, training, professional subscriptions, work equipment. <strong>Do not include accommodation</strong> provided by a client &mdash; not allowable for self-employed carers.</div>
+          </div>
+        </div>
+        <div class="iw"><span class="pre">&pound;</span><input type="number" id="ytdExp" inputmode="decimal" placeholder="0" oninput="calcAdv()" autocomplete="off"></div>
+      </div>
+    </div>
+    <div class="slabel" style="margin-top:.25rem">Additional expenses for this job
+      <div class="info-wrap">
+        <div class="info-btn" onclick="toggleInfo('i-jobexp')">i</div>
+        <div class="info-popup right" id="i-jobexp">Travel or costs specific to this placement, in addition to any expenses entered on the NLW Checker tab. Do not include accommodation provided by the client.</div>
+      </div>
+    </div>
+    <div class="field-row" style="margin-bottom:0">
+      <div class="field">
+        <div class="fl">This job&rsquo;s additional expenses</div>
+        <div class="iw"><span class="pre">&pound;</span><input type="number" id="jobExpAdv" inputmode="decimal" placeholder="0" oninput="calcAdv()" autocomplete="off"></div>
+      </div>
+      <div class="field"></div>
+    </div>
+  </div>
+
+  <div id="advResults"></div>
+
+  <div class="exp-disclaimer">
+    <strong>Note on expenses.</strong> Expenses accumulate throughout the year and HMRC assesses them annually &mdash; not per job. Keep records as you go. Accommodation provided by your client cannot be deducted. For a definitive tax calculation use HMRC self-assessment or speak to a qualified tax adviser.
+  </div>
+
+  <footer>For guidance only &middot; not financial or legal advice &middot; stufish-git.github.io/WageCheck</footer>
+</div>
 
 </div><!-- .shell -->
 <script src="app.js"></script>

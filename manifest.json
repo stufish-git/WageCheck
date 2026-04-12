@@ -1,7 +1,7 @@
 {
   "name": "WageCheck",
   "short_name": "WageCheck",
-  "description": "Check if your live-in care job pays above National Living Wage. Self-employed tax estimate included.",
+  "description": "NLW compliance and self-employed tax estimator for live-in carers.",
   "start_url": "/WageCheck/",
   "scope": "/WageCheck/",
   "display": "standalone",
